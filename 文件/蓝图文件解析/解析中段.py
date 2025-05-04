@@ -24,7 +24,7 @@ class 比特流解析器:
         self.offset += struct.calcsize(格式)
         return result
 
-def Base64解析(Base64字符) -> bytes:
+def Base64解析(Base64字符) -> str:
     解码 = base64.b64decode(Base64字符)
     解压缩 = gzip.decompress(解码)
     #十六进制数 = 解压缩.hex()

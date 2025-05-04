@@ -23,7 +23,7 @@ class 时间戳(蓝图基类):
             raise TypeError("输入类型必须是int或str")
 
     @staticmethod
-    def 整数转时间(时间戳数字: int) -> int:
+    def 整数转时间(时间戳数字: int) -> str:
         unix_ticks = 时间戳数字 - 621355968 * 1e9
         POSIX时间戳 = unix_ticks / 1e7
         return str(datetime.fromtimestamp(POSIX时间戳))
@@ -58,6 +58,7 @@ class url字符串(蓝图基类):
     def 转自然字符串(url: str) -> str:
         return unquote(url)
     
+    @staticmethod
     def 转url字符串(自然字符串: str) -> str:
         return quote(自然字符串)
     
