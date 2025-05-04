@@ -19,6 +19,8 @@ class 额外参数(蓝图dataclass基类):
     def 由json转换(cls, 数据字典):
         if 数据字典["参数类型"] == "未解析":
             return 额外参数之未解析.由json转换(数据字典)
+        if 数据字典["参数类型"] == "空白":
+            return 额外参数之空白.由json转换(数据字典)
         elif 数据字典["参数类型"] == "传送带":
             return 额外参数之传送带.由json转换(数据字典)
         elif 数据字典["参数类型"] == "分拣器":
@@ -71,6 +73,10 @@ class 额外参数之未解析(额外参数):
 @dataclass
 class 额外参数之空白(额外参数):
     参数类型: str = "空白"
+
+    @classmethod
+    def 由json转换(cls, 数据字典):
+        return cls(**数据字典)
 
     def 转比特流(self) -> bytes:
         流数据 = bytearray()
@@ -126,10 +132,19 @@ class 额外参数之分拣器(额外参数):
         return cls(**数据字典)
 
     @classmethod
-    def 尝试构造(未解析参数: 额外参数之未解析) -> 额外参数:
+    def 尝试构造(cls, 未解析参数: 额外参数之未解析) -> 额外参数:
         # 按理说参数长度只应该为0或2,除此以外都是未定义行为
         # 未定义行为, 但是有效
-        return 额外参数之传送带(分拣器长度 = 未解析参数.参数[0])
+        return 额外参数之分拣器(分拣器长度 = 类型.Int32(未解析参数.参数[0]))
+
+    def 转比特流(self) -> bytes:
+        流数据 = bytearray()
+        流数据.extend(struct.pack
+            ("<Hi",
+            1,
+            self.分拣器长度,
+        ))
+        return 流数据
 
     # 充分利用未定义行为,未经过测试,就先扔这里再说
     def 有损压缩转解析前(self) -> bytes:
