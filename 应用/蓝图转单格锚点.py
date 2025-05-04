@@ -1,0 +1,16 @@
+
+from dataclasses import dataclass, asdict
+from 文件.文件读写 import 工程目录
+from 文件.文件读写 import 读取泛蓝图文件
+from 文件.文件读写 import 保存蓝图
+from 功能.单格锚点 import 转换为单锚点
+
+# python -m 应用.蓝图转单格锚点
+
+print("脚本运行开始")
+
+本蓝图 = 读取泛蓝图文件(Rf"{工程目录()}\临时\输入.txt")
+转换为单锚点(本蓝图)
+保存蓝图(本蓝图).为蓝图txt文件(Rf"{工程目录()}\临时\输出.txt")
+
+print("脚本运行结束")
