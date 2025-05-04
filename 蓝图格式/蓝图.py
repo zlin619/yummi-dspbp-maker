@@ -2,14 +2,16 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Union
 from urllib.parse import unquote, quote
-from 蓝图格式.蓝图基础类型 import *
+
+from 文件.签名 import 签名的蓝图
 from 蓝图格式.中段 import 蓝图中段
 from 蓝图格式.图标 import 图标
-from 文件.签名 import 签名的蓝图
+from 蓝图格式.蓝图基础类型 import 蓝图基类, 蓝图dataclass基类
 
 
 class 时间戳(蓝图基类):
     DotNet时间戳: int
+
     # 输入为DateTime.Ticks。根据微软文档：
     # The value of this property represents the number of 100-nanosecond intervals that have elapsed since 12:00:00 midnight, January 1, 0001 in the Gregorian calendar
     # 因此我们命名100ns为1 tick
@@ -26,7 +28,7 @@ class 时间戳(蓝图基类):
     def 整数转时间(时间戳数字: int) -> int:
         unix_ticks = 时间戳数字 - 621355968 * 1e9
         POSIX时间戳 = unix_ticks / 1e7
-        return str(datetime.fromtimestamp(POSIX时间戳))
+        return str(datetime.fromtimestamp(POSIX时间戳))  # todo:类型标注错误
 
     @staticmethod
     def 时间转整数(时间字符串: str) -> int:
@@ -37,18 +39,20 @@ class 时间戳(蓝图基类):
             raise ValueError("时间戳格式错误。请使用ISO 8601格式。")
 
     def 转json(self) -> str:
-        return 时间戳.整数转时间(self.DotNet时间戳)
-    
+        return 时间戳.整数转时间(self.DotNet时间戳)  # todo:类型标注错误
+
     @classmethod
     def 由json转换(cls, 数据字典):
         return 时间戳(时间戳.时间转整数(数据字典))
 
     def 转蓝图字符串(self) -> str:
         return str(self.DotNet时间戳)
-    
+
+
 class url字符串(蓝图基类):
     url: str
-    def __init__(self, str):
+
+    def __init__(self, str):  # todo:使用内置类型作为参数名
         self.url = str
 
     def __repr__(self):
@@ -57,13 +61,14 @@ class url字符串(蓝图基类):
     @staticmethod
     def 转自然字符串(url: str) -> str:
         return unquote(url)
-    
+
+    @staticmethod
     def 转url字符串(自然字符串: str) -> str:
         return quote(自然字符串)
-    
+
     def 转json(self) -> str:
         return url字符串.转自然字符串(self.url)
-    
+
     @classmethod
     def 由json转换(cls, 数据字典):
         return url字符串(url字符串.转url字符串(数据字典))
@@ -71,7 +76,8 @@ class url字符串(蓝图基类):
     def 转蓝图字符串(self):
         return self.url
 
-@ dataclass
+
+@dataclass
 class 缩略图(蓝图dataclass基类):
     图标布局: int
     图标1: 图标
@@ -83,15 +89,18 @@ class 缩略图(蓝图dataclass基类):
     ########################
     # 以上为字段，以下为函数 #
     ########################
+
+
 # 缩略图 到此为止
 
 
-@ dataclass
+@dataclass
 class 蓝图头部(蓝图dataclass基类):
     缩略图: 缩略图
     创建时间: 时间戳
     游戏版本: str
     蓝图描述: url字符串
+
     ########################
     # 以上为字段，以下为函数 #
     ########################
@@ -110,6 +119,8 @@ class 蓝图头部(蓝图dataclass基类):
             self.缩略图.小标题.转蓝图字符串(),
             self.蓝图描述.转蓝图字符串()
         ])
+
+
 # 蓝图头部 到此为止
 
 
@@ -117,6 +128,7 @@ class 蓝图头部(蓝图dataclass基类):
 class 蓝图(蓝图dataclass基类):
     蓝图头部: 蓝图头部
     蓝图中段: 蓝图中段
+
     ########################
     # 以上为字段，以下为函数 #
     ########################

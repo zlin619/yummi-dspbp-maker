@@ -1,14 +1,14 @@
-import struct
-from dataclasses import dataclass
 # from typing import Optional
 # from typing import Type
-from typing import Any, List
+import struct
+from dataclasses import dataclass
+from typing import List
 
-from 蓝图格式.蓝图基础类型 import *
-import 蓝图格式.坐标 as 坐标格式
 import 蓝图格式.类型 as 类型
 from 蓝图格式.图标 import 图标
 from 蓝图格式.模型 import 模型
+from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
+
 
 @dataclass
 class 额外参数(蓝图dataclass基类):
@@ -51,13 +51,13 @@ class 额外参数之未解析(额外参数):
             "<H",
             参数长度
         ))
-        if 参数长度> 0:
+        if 参数长度 > 0:
             流数据.extend(struct.pack(
                 f"{参数长度}i",
                 *self.参数
             ))
         return 流数据
-    
+
     @classmethod
     def 由json转换(cls, 数据字典):
         return cls(**数据字典)
@@ -69,6 +69,7 @@ class 额外参数之未解析(额外参数):
             return self
         else:
             return 额外参数对应关系[模型].尝试构造(self)
+
 
 @dataclass
 class 额外参数之空白(额外参数):
@@ -83,11 +84,13 @@ class 额外参数之空白(额外参数):
         流数据.extend(struct.pack("<H", 0))
         return 流数据
 
+
 @dataclass
 class 额外参数之传送带(额外参数):
     图标ID: 图标
     图标数字: 类型.Int32
     参数类型: str = "传送带"
+
     # 注: 如果没图标的传送带没有额外参数的
     @classmethod
     def 由json转换(cls, 数据字典):
@@ -102,17 +105,16 @@ class 额外参数之传送带(额外参数):
             l_图标数字 = 类型.Int32(未解析参数.参数[1])
         else:
             l_图标数字 = 类型.Int32(0)
-        return 额外参数之传送带(图标ID = l_图标ID, 图标数字 = l_图标数字)
-
+        return 额外参数之传送带(图标ID=l_图标ID, 图标数字=l_图标数字)
 
     def 转比特流(self) -> bytes:
         流数据 = bytearray()
         流数据.extend(struct.pack
-            ("<Hii",
-            2,
-            self.图标ID.转int(),
-            self.图标数字
-        ))
+                      ("<Hii",
+                       2,
+                       self.图标ID.转int(),
+                       self.图标数字
+                       ))
         return 流数据
 
     # 充分利用未定义行为,未经过测试,就先扔这里再说
@@ -122,9 +124,10 @@ class 额外参数之传送带(额外参数):
         elif self.图标数字 == 0:
             return 额外参数之未解析([类型.Int32(self.图标ID.转int())])
 
+
 @dataclass
 class 额外参数之分拣器(额外参数):
-    分拣器长度: 类型.Int32 # 分拣器长度 -> 1-3
+    分拣器长度: 类型.Int32  # 分拣器长度 -> 1-3
     参数类型: str = "分拣器"
 
     @classmethod
@@ -135,20 +138,21 @@ class 额外参数之分拣器(额外参数):
     def 尝试构造(cls, 未解析参数: 额外参数之未解析) -> 额外参数:
         # 按理说参数长度只应该为0或2,除此以外都是未定义行为
         # 未定义行为, 但是有效
-        return 额外参数之分拣器(分拣器长度 = 类型.Int32(未解析参数.参数[0]))
+        return 额外参数之分拣器(分拣器长度=类型.Int32(未解析参数.参数[0]))
 
     def 转比特流(self) -> bytes:
         流数据 = bytearray()
         流数据.extend(struct.pack
-            ("<Hi",
-            1,
-            self.分拣器长度,
-        ))
+                      ("<Hi",
+                       1,
+                       self.分拣器长度,
+                       ))
         return 流数据
 
     # 充分利用未定义行为,未经过测试,就先扔这里再说
     def 有损压缩转解析前(self) -> bytes:
         return 额外参数之空白()
+
 
 @dataclass
 class 额外参数之储液罐(额外参数):
@@ -160,23 +164,26 @@ class 额外参数之储液罐(额外参数):
     def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
+
 @dataclass
 class 额外参数之射线接收站(额外参数):
-    是否光子生成: bool # 0(否):直接发电 1208(是):光子生成
+    是否光子生成: bool  # 0(否):直接发电 1208(是):光子生成
     参数类型: str = "射线接收站"
 
     @classmethod
     def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
+
 @dataclass
 class 额外参数之能量枢纽(额外参数):
-    模式: 类型.Int32 # -1:放电 0:待机 1:充电
+    模式: 类型.Int32  # -1:放电 0:待机 1:充电
     参数类型: str = "能量枢纽"
 
     @classmethod
     def 由json转换(cls, 数据字典):
         return cls(**数据字典)
+
 
 @dataclass
 class 额外参数之垂直发射井(额外参数):
@@ -187,14 +194,16 @@ class 额外参数之垂直发射井(额外参数):
     def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
+
 @dataclass
 class 额外参数之制造类建筑(额外参数):
-    是否生产加速: bool # 0(否):额外产出 1(是):生产加速
+    是否生产加速: bool  # 0(否):额外产出 1(是):生产加速
     参数类型: str = "制造类建筑"
 
     @classmethod
     def 由json转换(cls, 数据字典):
         return cls(**数据字典)
+
 
 # 电磁轨道弹射器
 # 流速监测器

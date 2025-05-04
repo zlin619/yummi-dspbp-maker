@@ -1,12 +1,12 @@
-import struct
-from dataclasses import dataclass, asdict, fields
+from dataclasses import dataclass
 from dataclasses import fields
 from typing import Annotated, get_origin, get_args, Type, Any
+
 
 class _字典转换器:
     # 尽可能不要使用这个类
     @staticmethod
-    def 转换字段值(字段类型: Type, 字段值: Any) -> dict:
+    def 转换字段值(字段类型: Type, 字段值: Any) -> dict | list:
         origin = get_origin(字段类型)
         if origin is Annotated:
             真实类型 = get_args(字段类型)[0]  # 提取int部分
@@ -35,10 +35,11 @@ class _字典转换器:
 class 蓝图基类:
     def 转json(self):
         raise NotImplementedError(f"谢谢你，这个算虚基类方法，请重写方法。类名：{self.__class__}")
-    
+
     @classmethod
     def 由json转换(cls, 数据字典: dict):
         raise NotImplementedError(f"谢谢你，这个算虚基类方法，请重写方法。类名：{cls}")
+
 
 @dataclass
 class 蓝图dataclass基类(蓝图基类):
@@ -55,13 +56,15 @@ class 蓝图dataclass基类(蓝图基类):
             else:
                 结果[field.name] = value
         return 结果
-    
+
     @classmethod
     def 由json转换(cls, 数据字典: dict):
         return _字典转换器.转换为class(cls, 数据字典)
 
+
 def 由json转换为类型(类型, 数据字典: dict):
     return _字典转换器.转换为class(类型, 数据字典)
+
 
 def 由json列表转换为类型列表(子类型, 列表: list):
     新列表 = []
