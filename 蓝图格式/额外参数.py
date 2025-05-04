@@ -16,23 +16,23 @@ class 额外参数(蓝图dataclass基类):
         raise NotImplementedError(f"谢谢你，这个算虚基类方法，请重写方法。")
     
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         if 数据字典["参数类型"] == "未解析":
-            return 额外参数之未解析.由json转换为cls(数据字典)
+            return 额外参数之未解析.由json转换(数据字典)
         elif 数据字典["参数类型"] == "传送带":
-            return 额外参数之传送带.由json转换为cls(数据字典)
+            return 额外参数之传送带.由json转换(数据字典)
         elif 数据字典["参数类型"] == "分拣器":
-            return 额外参数之分拣器.由json转换为cls(数据字典)
+            return 额外参数之分拣器.由json转换(数据字典)
         elif 数据字典["参数类型"] == "储液罐":
-            return 额外参数之储液罐.由json转换为cls(数据字典)
+            return 额外参数之储液罐.由json转换(数据字典)
         elif 数据字典["参数类型"] == "射线接收站":
-            return 额外参数之射线接收站.由json转换为cls(数据字典)
+            return 额外参数之射线接收站.由json转换(数据字典)
         elif 数据字典["参数类型"] == "能量枢纽":
-            return 额外参数之能量枢纽.由json转换为cls(数据字典)
+            return 额外参数之能量枢纽.由json转换(数据字典)
         elif 数据字典["参数类型"] == "垂直发射井":
-            return 额外参数之垂直发射井.由json转换为cls(数据字典)
+            return 额外参数之垂直发射井.由json转换(数据字典)
         elif 数据字典["参数类型"] == "制造类建筑":
-            return 额外参数之制造类建筑.由json转换为cls(数据字典)
+            return 额外参数之制造类建筑.由json转换(数据字典)
         else:
             raise NotImplementedError("伪纯虚基类，还想执行方法，想屁吃？")
 
@@ -56,7 +56,7 @@ class 额外参数之未解析(额外参数):
         return 流数据
     
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
 @dataclass
@@ -66,7 +66,7 @@ class 额外参数之传送带(额外参数):
     参数类型: str = "传送带"
     # 注: 如果没图标的传送带没有额外参数的
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
 @dataclass
@@ -75,7 +75,7 @@ class 额外参数之分拣器(额外参数):
     参数类型: str = "分拣器"
 
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
 @dataclass
@@ -85,7 +85,7 @@ class 额外参数之储液罐(额外参数):
     参数类型: str = "储液罐"
 
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
 @dataclass
@@ -94,7 +94,7 @@ class 额外参数之射线接收站(额外参数):
     参数类型: str = "射线接收站"
 
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
 @dataclass
@@ -103,7 +103,7 @@ class 额外参数之能量枢纽(额外参数):
     参数类型: str = "能量枢纽"
 
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
 @dataclass
@@ -112,7 +112,7 @@ class 额外参数之垂直发射井(额外参数):
     参数类型: str = "垂直发射井"
 
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
 @dataclass
@@ -121,7 +121,7 @@ class 额外参数之制造类建筑(额外参数):
     参数类型: str = "制造类建筑"
 
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
 # 电磁轨道弹射器

@@ -64,7 +64,7 @@ class 模型(蓝图基类):
         return 模型.序号转名字(self.序号)
     
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return 模型(数据字典)
     # 基础功能 #
 

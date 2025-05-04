@@ -66,5 +66,5 @@ class 图标(蓝图基类):
         return 图标.序号转名字(self.序号)
     
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return 图标(数据字典)
