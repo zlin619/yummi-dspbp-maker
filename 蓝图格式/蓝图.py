@@ -40,7 +40,7 @@ class 时间戳(蓝图基类):
         return 时间戳.整数转时间(self.DotNet时间戳)
     
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return 时间戳(时间戳.时间转整数(数据字典))
 
     def 转蓝图字符串(self) -> str:
@@ -65,7 +65,7 @@ class url字符串(蓝图基类):
         return url字符串.转自然字符串(self.url)
     
     @classmethod
-    def 由json转换为cls(cls, 数据字典):
+    def 由json转换(cls, 数据字典):
         return url字符串(url字符串.转url字符串(数据字典))
 
     def 转蓝图字符串(self):
