@@ -178,6 +178,12 @@ def 解析建筑(流解析器) -> list[建筑]:
             parameterLength,
         ) = 流解析器.解析("iiBBBBBBHHH")
 
+        parameter = 流解析器.解析("i" * parameterLength)
+        l_额外参数 = 额外参数之未解析 (
+            参数 = parameter
+        )
+        l_额外参数 = l_额外参数.尝试解析(modelIndex)
+
         输出接口 = 建筑主导接口 (
             目标序号 = 类型.Int32(outputObjIdx),
             目标接口 = 类型.Int8(outputToSlot),
@@ -189,12 +195,6 @@ def 解析建筑(流解析器) -> list[建筑]:
             目标接口 = 类型.Int8(inputToSlot),
             自身接口 = 类型.Int8(inputFromSlot),
             插槽偏移 = 类型.Int8(inputOffset)
-        )
-
-        # TODO: 解析参数
-        parameter = 流解析器.解析("i" * parameterLength)
-        l_额外参数 = 额外参数之未解析 (
-            参数 = parameter
         )
 
         当前建筑 = 建筑(
