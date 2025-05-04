@@ -1,6 +1,4 @@
-from dataclasses import dataclass, asdict
-from 蓝图格式.蓝图 import *
-from 文件.文件读写 import *
+from 文件.文件读写 import 保存蓝图, 读取泛蓝图文件, 工程目录, 保存所有建筑
 
 # 这个文件的主要作用是做给0代码基础的人看看
 # 首先, 你要下载VSCode和Python

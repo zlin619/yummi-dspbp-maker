@@ -1,9 +1,7 @@
-
-from dataclasses import dataclass, asdict
+from 功能.单格锚点 import 转换为单锚点
+from 文件.文件读写 import 保存蓝图
 from 文件.文件读写 import 工程目录
 from 文件.文件读写 import 读取泛蓝图文件
-from 文件.文件读写 import 保存蓝图
-from 功能.单格锚点 import 转换为单锚点
 
 # python -m 应用.蓝图转单格锚点
 

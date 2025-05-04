@@ -1,15 +1,14 @@
 import struct
 from dataclasses import dataclass
-# from typing import Optional
-# from typing import Type
 from typing import Any
 
-from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 import 蓝图格式.坐标 as 坐标格式
 import 蓝图格式.类型 as 类型
 from 蓝图格式.图标 import 图标
 from 蓝图格式.模型 import 模型
+from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 from 蓝图格式.额外参数 import 额外参数
+
 
 @dataclass
 class 建筑主导接口(蓝图dataclass基类):
@@ -18,6 +17,7 @@ class 建筑主导接口(蓝图dataclass基类):
     自身接口: 类型.Int8 = -1
     插槽偏移: 类型.Int8 = 0
     # 晨隐说插槽偏移常见于分拣器, 但我不知道这玩意干嘛的
+
 
 @dataclass
 class 建筑(蓝图dataclass基类):
@@ -34,8 +34,8 @@ class 建筑(蓝图dataclass基类):
     输出接口: 建筑主导接口
     输入接口: 建筑主导接口
 
-    配方序号: 类型.UInt16 # 常见于制造厂类建筑
-    过滤物品序号: 图标 # UInt16, 常见于分拣器、四向
+    配方序号: 类型.UInt16  # 常见于制造厂类建筑
+    过滤物品序号: 图标  # UInt16,常见于分拣器、四向
     额外参数: 额外参数
 
     # TODO: 
@@ -74,5 +74,3 @@ class 建筑(蓝图dataclass基类):
         return 流数据
     # 转比特流 到此为止
 # 建筑 到此为止
-
-

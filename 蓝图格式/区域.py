@@ -1,12 +1,9 @@
 import struct
 from dataclasses import dataclass
-from typing import Optional
-from typing import Type
-from typing import Any
 
-from 蓝图格式.蓝图基础类型 import *
 import 蓝图格式.坐标 as 坐标
 import 蓝图格式.类型 as 类型
+from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 
 
 @dataclass
@@ -17,6 +14,7 @@ class 区域(蓝图dataclass基类):
     area_segments: 类型.Int16
     锚点偏移: 坐标.Int16平面坐标
     大小: 坐标.Int16平面坐标
+
     ########################
     # 以上为字段，以下为函数 #
     ########################
@@ -34,5 +32,3 @@ class 区域(蓝图dataclass基类):
         )
     # 转比特流 到此为止
 # 区域 到此为止
-
-
