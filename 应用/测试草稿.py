@@ -1,10 +1,4 @@
-
-from dataclasses import dataclass, asdict
-from 蓝图格式.模型 import 模型
-from 蓝图格式.蓝图 import *
-from 蓝图格式.坐标 import *
-from 蓝图格式.中段 import *
-from 文件.文件读写 import *
+from 文件.文件读写 import 保存蓝图, 工程目录, 读取泛蓝图文件, 保存所有建筑
 
 # python -m 应用.测试草稿
 

@@ -5,6 +5,7 @@
 
 from 文件.DysonSphereMD5 import DysonSphereMD5
 
+
 def 签名(未签名蓝图) -> str:
     if isinstance(未签名蓝图, str):
         未签名蓝图 = 未签名蓝图.encode('utf-8')
@@ -13,7 +14,8 @@ def 签名(未签名蓝图) -> str:
     else:
         raise TypeError('未签名蓝图必须为字符串str或bytearray')
 
-    return DysonSphereMD5(variant = DysonSphereMD5.Variant.MD5F).update(未签名蓝图).hexdigest().upper()
+    return DysonSphereMD5(variant=DysonSphereMD5.Variant.MD5F).update(未签名蓝图).hexdigest().upper()
+
 
 def 签名的蓝图(未签名蓝图: str) -> str:
     return 未签名蓝图 + '"' + 签名(未签名蓝图)

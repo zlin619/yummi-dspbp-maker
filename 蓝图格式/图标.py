@@ -1,11 +1,11 @@
-from dataclasses import dataclass
 from typing import Union
 
 import 日志
-from 蓝图格式.蓝图基础类型 import 蓝图基类
-from 蓝图格式.序号字典.序号转图标 import 序号转图标
 from 蓝图格式.序号字典.图标转序号 import 图标转序号
+from 蓝图格式.序号字典.序号转图标 import 序号转图标
 from 蓝图格式.序号字典.绰号转真名 import 绰号转真名
+from 蓝图格式.蓝图基础类型 import 蓝图基类
+
 
 class 图标(蓝图基类):
     # 图标包含四大类
@@ -30,7 +30,7 @@ class 图标(蓝图基类):
         elif isinstance(other, int):
             return self.序号 == other
         elif isinstance(other, str):
-            return 图标.名字转序号(self.序号) == other
+            return 图标.名字转序号(self.序号) == other  # todo:参数应为str但实际有可能为int
         else:
             raise TypeError("输入类型必须是int, str 或图标")
 
@@ -48,7 +48,7 @@ class 图标(蓝图基类):
     def 名字转序号(名字: str) -> int:
         if 名字.startswith("未知图标"):
             return int(名字[4:])
-        
+
         if 名字 in 绰号转真名:
             名字 = 绰号转真名[名字]
 
@@ -58,13 +58,13 @@ class 图标(蓝图基类):
 
     def 转蓝图字符串(self) -> str:
         return str(self.序号)
-    
+
     def 转int(self) -> int:
         return self.序号
 
     def 转json(self):
         return 图标.序号转名字(self.序号)
-    
+
     @classmethod
     def 由json转换(cls, 数据字典):
         return 图标(数据字典)
