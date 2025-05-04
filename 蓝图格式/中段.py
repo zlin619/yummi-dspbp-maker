@@ -28,11 +28,11 @@ class 蓝图中段(蓝图dataclass基类):
         流数据 = bytearray()
         流数据.extend(self.杂项.转比特流())
         流数据.extend(struct.pack("b", len(self.区域)))
-        for 区域 in self.区域: # todo:使用了类型名作为变量名
-            流数据.extend(区域.转比特流())
+        for 单个区域 in self.区域:
+            流数据.extend(单个区域.转比特流())
         流数据.extend(struct.pack("i", len(self.建筑)))
-        for 建筑 in self.建筑: # todo:使用了类型名作为变量名
-            流数据.extend(建筑.转比特流())
+        for 单个建筑 in self.建筑:
+            流数据.extend(单个建筑.转比特流())
         return bytes(流数据)
 
     def 转蓝图字符串(self) -> str:

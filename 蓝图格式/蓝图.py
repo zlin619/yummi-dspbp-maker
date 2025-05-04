@@ -25,10 +25,10 @@ class 时间戳(蓝图基类):
             raise TypeError("输入类型必须是int或str")
 
     @staticmethod
-    def 整数转时间(时间戳数字: int) -> int:
+    def 整数转时间(时间戳数字: int) -> str:
         unix_ticks = 时间戳数字 - 621355968 * 1e9
         POSIX时间戳 = unix_ticks / 1e7
-        return str(datetime.fromtimestamp(POSIX时间戳))  # todo:类型标注错误
+        return str(datetime.fromtimestamp(POSIX时间戳))
 
     @staticmethod
     def 时间转整数(时间字符串: str) -> int:
@@ -39,7 +39,7 @@ class 时间戳(蓝图基类):
             raise ValueError("时间戳格式错误。请使用ISO 8601格式。")
 
     def 转json(self) -> str:
-        return 时间戳.整数转时间(self.DotNet时间戳)  # todo:类型标注错误
+        return 时间戳.整数转时间(self.DotNet时间戳)
 
     @classmethod
     def 由json转换(cls, 数据字典):
@@ -52,8 +52,8 @@ class 时间戳(蓝图基类):
 class url字符串(蓝图基类):
     url: str
 
-    def __init__(self, str):  # todo:使用内置类型作为参数名
-        self.url = str
+    def __init__(self, 输入):
+        self.url = 输入
 
     def __repr__(self):
         return self.url
@@ -107,7 +107,7 @@ class 蓝图头部(蓝图dataclass基类):
     def 转蓝图字符串(self) -> str:
         return ','.join([
             '0',  # 固定值
-            self.缩略图.图标布局,
+            str(self.缩略图.图标布局),
             self.缩略图.图标1.转蓝图字符串(),
             self.缩略图.图标2.转蓝图字符串(),
             self.缩略图.图标3.转蓝图字符串(),

@@ -175,7 +175,7 @@ class 比特流解析器:
 
             parameter = self.解析("i" * parameterLength)
             l_额外参数 = 额外参数之未解析(
-                参数=parameter  # todo:应为list但传入了tuple
+                参数=[类型.Int32(x) for x in parameter]
             )
             l_额外参数 = l_额外参数.尝试解析(modelIndex)
 
@@ -208,7 +208,7 @@ class 比特流解析器:
         return 所有建筑
 
 
-def Base64解析(Base64字符) -> bytes:
+def Base64解析(Base64字符) -> str:
     解码 = base64.b64decode(Base64字符)
     解压缩 = gzip.decompress(解码)
     # 十六进制数 = 解压缩.hex()
@@ -218,13 +218,13 @@ def Base64解析(Base64字符) -> bytes:
 def 解析中段(中段字符) -> 蓝图中段:
     十六进制数 = Base64解析(中段字符)
     流解析器 = 比特流解析器(十六进制数)
-    杂项 = 流解析器.解析杂项()
-    区域 = 流解析器.解析区域() # todo:使用了类型名作为变量名
-    建筑 = 流解析器.解析建筑() # todo:使用了类型名作为变量名
+    l_杂项 = 流解析器.解析杂项()
+    l_区域 = 流解析器.解析区域()
+    l_建筑 = 流解析器.解析建筑()
     return 蓝图中段(
-        杂项=杂项,
-        区域=区域,
-        建筑=建筑
+        杂项=l_杂项,
+        区域=l_区域,
+        建筑=l_建筑
     )
 
 
