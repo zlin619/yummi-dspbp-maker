@@ -25,12 +25,14 @@ class 图标(蓝图基类):
         return 图标.序号转名字(self.序号)
 
     def __eq__(self, other):
-        if isinstance(other, 图标):  # 检查是否是同类实例
+        if other.isdigit():
+            other = int(other)
+        if isinstance(other, 图标):
             return self.序号 == other.序号
         elif isinstance(other, int):
             return self.序号 == other
         elif isinstance(other, str):
-            return 图标.名字转序号(self.序号) == other  # todo:参数应为str但实际有可能为int
+            return 图标.名字转序号(self.序号) == other
         else:
             raise TypeError("输入类型必须是int, str 或图标")
 
