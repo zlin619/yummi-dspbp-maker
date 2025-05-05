@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from dataclasses import fields
 from typing import Annotated, get_origin, get_args, Type, Any
-from enum import IntEnum
+from enum import Enum, IntEnum
 
 class 布尔值(IntEnum):
     否 = 0
@@ -11,15 +11,15 @@ class _字典转换器:
     # 尽可能不要使用这个类
     @staticmethod
     def 转换字段值(字段类型: Type, 字段值: Any) -> dict | list:
-        origin = get_origin(字段类型)
-        if origin is Annotated:
+        原始字段 = get_origin(字段类型)
+        if 原始字段 is Annotated:
             真实类型 = get_args(字段类型)[0]  # 提取int部分
             return _字典转换器.转换字段值(真实类型, 字段值)  # 递归处理
-        elif origin is list:
+        elif 原始字段 is list:
             元素类型 = get_args(字段类型)[0]
             return [_字典转换器.转换字段值(元素类型, x) for x in 字段值]
-        elif origin is IntEnum:
-            return 字段类型(字段值)
+        elif issubclass(字段类型, Enum):
+            return 字段类型[字段值]
         elif issubclass(字段类型, 蓝图基类):
             return 字段类型.由json转换(字段值)
         else:
