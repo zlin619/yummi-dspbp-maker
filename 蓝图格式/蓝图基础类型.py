@@ -3,6 +3,10 @@ from dataclasses import fields
 from typing import Annotated, get_origin, get_args, Type, Any
 from enum import IntEnum
 
+class 布尔值(IntEnum):
+    否 = 0
+    是 = 1
+
 class _字典转换器:
     # 尽可能不要使用这个类
     @staticmethod
