@@ -38,10 +38,10 @@ class 建筑(蓝图dataclass基类):
     过滤物品序号: 图标  # UInt16,常见于分拣器、四向
     额外参数: 额外参数
 
-    # TODO: 
+    # TODO:
     # 以下并非正式数据的一部分
-    被动链接: Any = None
-    玩家标注: Any = None
+    # 被动链接: Any = None
+    # 玩家标注: Any = None
 
     ########################
     # 以上为字段，以下为函数 #
@@ -49,28 +49,35 @@ class 建筑(蓝图dataclass基类):
     def 转比特流(self) -> bytes:
         流数据 = bytearray()
         流数据.extend(struct.pack("<i", -101))
-        流数据.extend(struct.pack(
-            "<iHHb",
-            self.建筑序号,
-            self.物品序号.转int(),
-            self.模型序号.转int(),
-            self.区域序号
-        ))
+        流数据.extend(
+            struct.pack(
+                "<iHHb",
+                self.建筑序号,
+                self.物品序号.转int(),
+                self.模型序号.转int(),
+                self.区域序号,
+            )
+        )
         流数据.extend(self.空间姿态.转比特流())
-        流数据.extend(struct.pack(
-            "<iiBBBBBBHH",
-            self.输出接口.目标序号,
-            self.输入接口.目标序号,
-            self.输出接口.目标接口,
-            self.输入接口.自身接口,
-            self.输出接口.自身接口,
-            self.输入接口.目标接口,
-            self.输出接口.插槽偏移,
-            self.输入接口.插槽偏移,
-            self.配方序号,
-            self.过滤物品序号.转int(),
-        ))
+        流数据.extend(
+            struct.pack(
+                "<iiBBBBBBHH",
+                self.输出接口.目标序号,
+                self.输入接口.目标序号,
+                self.输出接口.目标接口,
+                self.输入接口.自身接口,
+                self.输出接口.自身接口,
+                self.输入接口.目标接口,
+                self.输出接口.插槽偏移,
+                self.输入接口.插槽偏移,
+                self.配方序号,
+                self.过滤物品序号.转int(),
+            )
+        )
         流数据.extend(self.额外参数.转比特流())
         return 流数据
+
     # 转比特流 到此为止
+
+
 # 建筑 到此为止
