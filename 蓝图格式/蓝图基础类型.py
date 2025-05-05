@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from dataclasses import fields
 from typing import Annotated, get_origin, get_args, Type, Any
-
+from enum import IntEnum
 
 class _字典转换器:
     # 尽可能不要使用这个类
@@ -14,6 +14,8 @@ class _字典转换器:
         elif origin is list:
             元素类型 = get_args(字段类型)[0]
             return [_字典转换器.转换字段值(元素类型, x) for x in 字段值]
+        elif origin is IntEnum:
+            return 字段类型(字段值)
         elif issubclass(字段类型, 蓝图基类):
             return 字段类型.由json转换(字段值)
         else:
@@ -53,6 +55,8 @@ class 蓝图dataclass基类(蓝图基类):
                 结果[field.name] = value.转json()
             elif isinstance(value, list):
                 结果[field.name] = [item.转json() if isinstance(item, 蓝图基类) else item for item in value]
+            elif isinstance(value, IntEnum):
+                结果[field.name] = value.name
             else:
                 结果[field.name] = value
         return 结果

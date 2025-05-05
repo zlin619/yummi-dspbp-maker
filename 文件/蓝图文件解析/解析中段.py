@@ -175,6 +175,7 @@ class 比特流解析器:
 
             parameter = self.解析("i" * parameterLength)
             l_额外参数 = 额外参数之未解析(
+                参数长度 = parameterLength,
                 参数=[类型.Int32(x) for x in parameter]
             )
             l_额外参数 = l_额外参数.尝试解析(modelIndex)
