@@ -11,13 +11,14 @@ from 蓝图格式.图标 import 图标
 from 蓝图格式.模型 import 模型
 from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 from 蓝图格式.蓝图基础类型 import 布尔值
+from 蓝图格式.蓝图基础类型 import 由json转换为类型
 from 蓝图格式.物流塔额外参数Util import 物流塔格子
 from 蓝图格式.物流塔额外参数Util import 带子出口
 
 @dataclass
 class 额外参数(蓝图dataclass基类):
-    def 转比特流(self) -> bytes:
-        raise NotImplementedError(f"谢谢你，这个算虚基类方法，请重写方法。")
+    def 去解析(self):
+        raise NotImplementedError(f"谢谢你，这个算虚基类方法，请重写方法。") 
 
     @classmethod
     def 由json转换(cls, 数据字典):
@@ -96,32 +97,30 @@ class 额外参数之未解析(额外参数):
         else:
             return 额外参数对应关系[模型].尝试构造(self)
 
-
 @dataclass
-class 额外参数之空白(额外参数):
-    参数类型: str = "空白"
-
+class 解析后额外参数(额外参数):
     @classmethod
     def 由json转换(cls, 数据字典):
-        return cls(**数据字典)
+        print(cls)
+        print(数据字典)
+        return 由json转换为类型(cls, 数据字典)
 
-    def 转比特流(self) -> bytes:
-        流数据 = bytearray()
-        流数据.extend(struct.pack("<H", 0))
-        return 流数据
-
+    def 转比特流(self):
+        return self.去解析().转比特流()
 
 @dataclass
-class 额外参数之传送带(额外参数):
+class 额外参数之空白(解析后额外参数):
+    参数类型: str = "空白"
+    def 去解析(self) -> 额外参数之未解析:
+        return 额外参数之未解析(参数长度=0, 参数=[])
+
+@dataclass
+class 额外参数之传送带(解析后额外参数):
     图标ID: 图标
     图标数字: 类型.Int32
     参数类型: str = "传送带"
 
     # 注: 如果没图标的传送带没有额外参数的
-    @classmethod
-    def 由json转换(cls, 数据字典):
-        return cls(**数据字典)
-
     @classmethod
     def 尝试构造(cls, 未解析参数: 额外参数之未解析) -> 额外参数:
         # 按理说参数长度只应该为0或2,除此以外都是未定义行为
@@ -133,19 +132,17 @@ class 额外参数之传送带(额外参数):
             l_图标数字 = 类型.Int32(0)
         return 额外参数之传送带(图标ID=l_图标ID, 图标数字=l_图标数字)
 
-    def 转比特流(self) -> bytes:
-        流数据 = bytearray()
-        流数据.extend(struct.pack("<Hii", 2, self.图标ID.转int(), self.图标数字))
-        return 流数据
+    def 去解析(self) -> 额外参数之未解析:
+        return 额外参数之未解析 (
+            参数长度=2,
+            参数=[self.图标ID.转int(), self.图标数字]
+        )
+# 额外参数之传送带 到此为止
 
 @dataclass
-class 额外参数之分拣器(额外参数):
+class 额外参数之分拣器(解析后额外参数):
     分拣器长度: 类型.Int32  # 分拣器长度 -> 1-3
     参数类型: str = "分拣器"
-
-    @classmethod
-    def 由json转换(cls, 数据字典):
-        return cls(**数据字典)
 
     @classmethod
     def 尝试构造(cls, 未解析参数: 额外参数之未解析) -> 额外参数:
@@ -153,74 +150,91 @@ class 额外参数之分拣器(额外参数):
         # 未定义行为, 但是有效
         return 额外参数之分拣器(分拣器长度=类型.Int32(未解析参数.参数[0]))
 
-    def 转比特流(self) -> bytes:
-        流数据 = bytearray()
-        流数据.extend(
-            struct.pack(
-                "<Hi",
-                1,
-                self.分拣器长度,
-            )
-        )
-        return 流数据
+    def 去解析(self) -> 额外参数之未解析:
+        return 额外参数之未解析(参数长度=1, 参数=[self.分拣器长度])
 
     # 充分利用未定义行为,未经过测试,就先扔这里再说
     def 有损压缩转解析前(self) -> bytes:
         return 额外参数之空白()
+# 额外参数之传送带 到此为止
 
+class 储液罐布尔(IntEnum):
+    开 = 1
+    关 = -1
 
 @dataclass
-class 额外参数之储液罐(额外参数):
-    是否输出: bool
-    是否输入: bool
+class 额外参数之储液罐(解析后额外参数):
+    输出: 储液罐布尔
+    输入: 储液罐布尔
     参数类型: str = "储液罐"
 
     @classmethod
-    def 由json转换(cls, 数据字典):
-        return cls(**数据字典)
+    def 尝试构造(cls, 未解析参数: 额外参数之未解析) -> 额外参数:
+        # 按理说参数长度只应该为0或2,除此以外都是未定义行为
+        # 未定义行为, 但是有效
+        return cls(
+            输出=储液罐布尔(未解析参数.参数[0]),
+            输入=储液罐布尔(未解析参数.参数[1]),
+        )
 
+    def 去解析(self) -> 额外参数之未解析:
+        return 额外参数之未解析(参数长度=2, 参数=[int(self.输出.value), int(self.输入)])
+
+class 射线模式(IntEnum):
+    直接发电 = 0
+    光子生成 = 1208
 
 @dataclass
-class 额外参数之射线接收站(额外参数):
-    是否光子生成: bool  # 0(否):直接发电 1208(是):光子生成
+class 额外参数之射线接收站(解析后额外参数):
+    接收模式: 射线模式
     参数类型: str = "射线接收站"
 
     @classmethod
-    def 由json转换(cls, 数据字典):
-        return cls(**数据字典)
+    def 尝试构造(cls, 未解析参数: 额外参数之未解析) -> 额外参数:
+        return 额外参数之射线接收站(接收模式=射线模式(未解析参数.参数[0]))
 
+    def 去解析(self) -> 额外参数之未解析:
+        return 额外参数之未解析(参数长度=1, 参数=[self.尝试构造])
+
+class 能量枢纽模式(IntEnum):
+    放电 = -1
+    待机 = 0
+    充电 = 1
 
 @dataclass
-class 额外参数之能量枢纽(额外参数):
-    模式: 类型.Int32  # -1:放电 0:待机 1:充电
+class 额外参数之能量枢纽(解析后额外参数):
+    模式: 能量枢纽模式
     参数类型: str = "能量枢纽"
 
     @classmethod
-    def 由json转换(cls, 数据字典):
-        return cls(**数据字典)
+    def 尝试构造(cls, 未解析参数: 额外参数之未解析) -> 额外参数:
+        return 额外参数之能量枢纽(接收模式=能量枢纽模式(未解析参数.参数[0]))
+
+    def 去解析(self) -> 额外参数之未解析:
+        return 额外参数之未解析(参数长度=1, 参数=[self.尝试构造])
 
 
 @dataclass
-class 额外参数之垂直发射井(额外参数):
-    是否十倍射速: bool
+class 额外参数之垂直发射井(解析后额外参数):
+    是否十倍射速: 布尔值  # 沙盒特供
     参数类型: str = "垂直发射井"
 
     @classmethod
-    def 由json转换(cls, 数据字典):
-        return cls(**数据字典)
+    def 尝试构造(cls, 未解析参数: 额外参数之未解析) -> 额外参数:
+        return 额外参数之能量枢纽(是否十倍射速=布尔值(未解析参数.参数[0]))
+
+    def 去解析(self) -> 额外参数之未解析:
+        return 额外参数之未解析 (参数长度=1, 参数=[self.是否十倍射速])
 
 
 @dataclass
-class 额外参数之制造类建筑(额外参数):
-    是否生产加速: bool  # 0(否):额外产出 1(是):生产加速
+class 额外参数之制造类建筑(解析后额外参数):
+    是否生产加速: 布尔值  # 0(否):额外产出 1(是):生产加速
     参数类型: str = "制造类建筑"
 
-    @classmethod
-    def 由json转换(cls, 数据字典):
-        return cls(**数据字典)
 
 @dataclass
-class 额外参数之物流塔(额外参数):
+class 额外参数之物流塔(解析后额外参数):
     # TODO: 这里物流塔格子和带子出口有32个,在json显示上会非常难看, 作为仙术蓝图制作者会比较不块. 
     # 应当将没使用的格子不放入json
     # 但这不是什么要紧事情, 可以先不做
@@ -240,12 +254,6 @@ class 额外参数之物流塔(额外参数):
     行星运输机自动填充: 布尔值
     星际运输船运输机自动填充: 布尔值
     参数类型: str = "物流塔"
-
-    @classmethod
-    def 由json转换(cls, data_dict):
-        data_dict["格子"] = [物流塔格子.由json转换(s) for s in data_dict["格子"]]
-        data_dict["传送带出口"] = [带子出口.由json转换(s) for s in data_dict["传送带出口"]]
-        return cls(**data_dict)
 
     @classmethod
     def 尝试构造(cls, 未解析参数: 额外参数之未解析) -> 额外参数:
@@ -270,6 +278,7 @@ class 额外参数之物流塔(额外参数):
         )
 
     def 转比特流(self) -> bytes:
+        print(self)
         params = list(
             chain(
                 *[x.to_params() for x in self.格子],
@@ -312,4 +321,5 @@ class 额外参数之物流塔(额外参数):
     模型.名字转序号("行星内物流运输站"): 额外参数之物流塔,
     模型.名字转序号("星际物流运输站"): 额外参数之物流塔,
     模型.名字转序号("大型采矿机"): 额外参数之物流塔,
+    模型.名字转序号("储液罐"): 额外参数之储液罐,
 }
