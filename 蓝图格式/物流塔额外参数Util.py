@@ -40,10 +40,10 @@ class 物流塔格子(蓝图dataclass基类):
     锁定模式: 沙盒锁定模式
 
     @classmethod
-    def from_params(cls, p):
+    def 由数组构造(cls, p):
         return cls(图标(p[0]), 运输模式(p[1]), 运输模式(p[2]), p[3], 沙盒锁定模式(p[4]))
 
-    def to_params(self):
+    def 转二进制数组(self):
         return [
             self.物品ID.序号,
             self.本地运输模式.value,
@@ -59,10 +59,10 @@ class 带子出口(蓝图dataclass基类):
     接口建筑索引: 类型.Int32
 
     @classmethod
-    def from_params(cls, p):
+    def 由数组构造(cls, p):
         return cls(带进出塔(p[0]), 类型.Int32(p[1]))
 
-    def to_params(self):
+    def 转二进制数组(self):
         return [
             self.朝向.value,
             self.接口建筑索引,
