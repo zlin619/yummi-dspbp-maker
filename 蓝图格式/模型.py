@@ -72,11 +72,33 @@ class 模型(蓝图基类):
     # 拓展功能 #
     # 大部分情况下, 模型决定功能而非物品ID。
     # 因此，判定建筑最好用模型序号
+    # 硬编码, 有点降低可维护性, 并且没用更清晰易懂的中文, 是基于性能考虑
+    # 反正除了创世之书, 没人闲着蛋疼天天动模型ID
     def 是分拣器吗(self):
         return self.序号 in [41, 42, 43, 483]
 
     def 是传送带吗(self):
         return self.序号 in [35, 36, 37]
+
+    def 是熔炉吗(self):
+        return self.序号 in [62, 194, 457]
+
+    def 是制造台吗(self):
+        return self.序号 in [65, 66, 67, 456]
+
+    def 是化工厂吗(self):
+        return self.序号 in [64, 376]
+
+    def 是研究站吗(self):
+        return self.序号 in [70, 455]
+
+    def 是制造建筑吗(self):
+        # 研究站和分馏塔不算
+        return \
+            self.是熔炉吗() or \
+            self.是制造台吗() or \
+            self.是化工厂吗() or \
+            self.序号 in [63, 69] # 是原油萃取站吗或量子对撞机吗
 
     def 是塔吗(self):
         return self.序号 in [49, 50]
