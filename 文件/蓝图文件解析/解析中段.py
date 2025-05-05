@@ -178,7 +178,7 @@ class 比特流解析器:
                 参数长度 = parameterLength,
                 参数=[类型.Int32(x) for x in parameter]
             )
-            l_额外参数 = l_额外参数.尝试解析(modelIndex)
+            l_额外参数 = l_额外参数.尝试解析(模型类(modelIndex))
 
             输出接口 = 建筑主导接口(
                 目标序号=类型.Int32(outputObjIdx),
