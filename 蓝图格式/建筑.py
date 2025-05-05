@@ -9,7 +9,6 @@ from 蓝图格式.模型 import 模型
 from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 from 蓝图格式.额外参数 import 额外参数
 
-
 @dataclass
 class 建筑主导接口(蓝图dataclass基类):
     目标序号: 类型.Int32 = -1

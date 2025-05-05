@@ -9,8 +9,10 @@ from typing import List
 import 蓝图格式.类型 as 类型
 from 蓝图格式.图标 import 图标
 from 蓝图格式.模型 import 模型
-from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类, 蓝图基类
-
+from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
+from 蓝图格式.蓝图基础类型 import 布尔值
+from 蓝图格式.物流塔额外参数Util import 物流塔格子
+from 蓝图格式.物流塔额外参数Util import 带子出口
 
 @dataclass
 class 额外参数(蓝图dataclass基类):
@@ -217,134 +219,74 @@ class 额外参数之制造类建筑(额外参数):
     def 由json转换(cls, 数据字典):
         return cls(**数据字典)
 
-
-# 电磁轨道弹射器
-# 流速监测器
-# 物流配送器
-
-
-# 塔
-class 运输模式(IntEnum):
-    存储 = 0
-    供应 = 1
-    浮球 = 2
-
-class 锁定模式(IntEnum):
-    不设置 = 0
-    满仓 = 1
-    一半 = 2
-    空仓 = 3
-
-class 方向(IntEnum):
-    不设置 = 0
-    进 = 1
-    出 = 2
-
-@dataclass
-class Storage(蓝图dataclass基类):
-    item_id: 图标
-    local_运输模式: 运输模式
-    remote_运输模式: 运输模式
-    max: 类型.Int32
-    lockAmount: 锁定模式
-
-    @classmethod
-    def from_params(cls, p):
-        return cls(图标(p[0]), 运输模式(p[1]), 运输模式(p[2]), p[3], 锁定模式(p[4]))
-
-    def to_params(self):
-        return [
-            self.item_id.序号,
-            self.local_运输模式.value,
-            self.remote_运输模式.value,
-            self.max,
-            self.lockAmount.value,
-            0,
-        ]
-
-
-@dataclass
-class Slot(蓝图dataclass基类):
-    dir: 方向
-    storage_idx: int
-
-    @classmethod
-    def from_params(cls, p):
-        return cls(方向(p[0]), p[1])
-
-    def to_params(self):
-        return [
-            self.dir.value,
-            self.storage_idx,
-            0,
-            0,
-        ]
-
-
 @dataclass
 class 额外参数之物流塔(额外参数):
-    storage: List[Storage]  # 	Array(storageNum)	0	192	物品栏位参数
-    slots: List[Slot]  # 	Array(slotsNum)	192	320	传送带插槽参数
-    work_energy_per_tick: int
-    trip_range_of_drones: int
-    trip_range_of_ships: int
-    include_orbit_collector: bool
-    warp_enable_distance: int
-    warper_necessary: int
-    delivery_amount_of_drones: int
-    delivery_amount_of_ships: int
-    piler_count: int
-    mining_speed: int
-    drone_auto_replenish: bool
-    ship_auto_replenish: bool
+    # TODO: 这里物流塔格子和带子出口有32个,在json显示上会非常难看, 作为仙术蓝图制作者会比较不块. 
+    # 应当将没使用的格子不放入json
+    # 但这不是什么要紧事情, 可以先不做
+
+    格子: List[物流塔格子]  # 	Array(storageNum)	0	192	物品栏位参数
+    传送带出口: List[带子出口]  # 	Array(带子出口)	192	320	传送带插槽参数
+    每帧耗电_焦耳: int
+    本地运输范围: int  # 	本地运输距离的存储方式是100000000*cos(θ)
+    星际运输范围_百米: int  # 	星际运输存储方式是百米, 1LY = 2400000M, 无限为 240000000, 也就是100光年
+    会从轨道采集器取货: 布尔值
+    曲速启用路程M: int  # 	游戏内UI为AU, 1AU = 40000M
+    翘曲器必备: 布尔值
+    行星运输机起送量百分比: int
+    星际运输船起送量百分比: int
+    出塔集装层数: int
+    采矿速度: int
+    行星运输机自动填充: 布尔值
+    星际运输船运输机自动填充: 布尔值
     参数类型: str = "物流塔"
 
     @classmethod
     def 由json转换(cls, data_dict):
-        data_dict["storage"] = [Storage.由json转换(s) for s in data_dict["storage"]]
-        data_dict["slots"] = [Slot.由json转换(s) for s in data_dict["slots"]]
+        data_dict["格子"] = [物流塔格子.由json转换(s) for s in data_dict["格子"]]
+        data_dict["传送带出口"] = [带子出口.由json转换(s) for s in data_dict["传送带出口"]]
         return cls(**data_dict)
 
     @classmethod
     def 尝试构造(cls, 未解析参数: 额外参数之未解析) -> 额外参数:
         p = 未解析参数.参数
         return cls(
-            storage=[Storage.from_params(p[i * 6 : i * 6 + 5]) for i in range(32)],
-            slots=[
-                Slot.from_params(p[192 + i * 4 : 192 + i * 4 + 4]) for i in range(32)
+            格子=[物流塔格子.from_params(p[i * 6 : i * 6 + 5]) for i in range(32)],
+            传送带出口=[
+                带子出口.from_params(p[192 + i * 4 : 192 + i * 4 + 4]) for i in range(32)
             ],
-            work_energy_per_tick=p[320],
-            trip_range_of_drones=p[321],
-            trip_range_of_ships=p[322],
-            include_orbit_collector=bool(p[323]),
-            warp_enable_distance=p[324],
-            warper_necessary=p[325],
-            delivery_amount_of_drones=p[326],
-            delivery_amount_of_ships=p[327],
-            piler_count=p[328],
-            mining_speed=p[329],
-            drone_auto_replenish=bool(p[330]),
-            ship_auto_replenish=bool(p[331]),
+            每帧耗电_焦耳=p[320],
+            本地运输范围=p[321],
+            星际运输范围_百米=p[322],
+            会从轨道采集器取货=布尔值(p[323]),
+            曲速启用路程M=p[324],
+            翘曲器必备=布尔值(p[325]),
+            行星运输机起送量百分比=p[326],
+            星际运输船起送量百分比=p[327],
+            出塔集装层数=p[328],
+            采矿速度=p[329],
+            行星运输机自动填充=布尔值(p[330]),
+            星际运输船运输机自动填充=布尔值(p[331]),
         )
 
     def 转比特流(self) -> bytes:
         params = list(
             chain(
-                *[x.to_params() for x in self.storage],
-                *[x.to_params() for x in self.slots],
+                *[x.to_params() for x in self.格子],
+                *[x.to_params() for x in self.传送带出口],
                 [
-                    self.work_energy_per_tick,
-                    self.trip_range_of_drones,
-                    self.trip_range_of_ships,
-                    int(self.include_orbit_collector),
-                    self.warp_enable_distance,
-                    self.warper_necessary,
-                    self.delivery_amount_of_drones,
-                    self.delivery_amount_of_ships,
-                    self.piler_count,
-                    self.mining_speed,
-                    int(self.drone_auto_replenish),
-                    int(self.ship_auto_replenish),
+                    self.每帧耗电_焦耳,
+                    self.本地运输范围,
+                    self.星际运输范围_百米,
+                    int(self.会从轨道采集器取货),
+                    self.曲速启用路程M,
+                    int(self.翘曲器必备),
+                    self.行星运输机起送量百分比,
+                    self.星际运输船起送量百分比,
+                    self.出塔集装层数,
+                    self.采矿速度,
+                    int(self.行星运输机自动填充),
+                    int(self.星际运输船运输机自动填充),
                 ],
             )
         )
