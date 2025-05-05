@@ -2,7 +2,7 @@
 # from typing import Type
 import struct
 from dataclasses import dataclass
-from enum import Enum
+from enum import IntEnum
 from itertools import chain
 from typing import List
 
@@ -46,21 +46,47 @@ class 额外参数(蓝图dataclass基类):
 @dataclass
 class 额外参数之未解析(额外参数):
     参数: List[类型.Int32]
+    参数长度: int
     参数类型: str = "未解析"
 
     def 转比特流(self) -> bytes:
+        self.长度还原()
         流数据 = bytearray()
-        参数长度 = len(self.参数)
-        流数据.extend(struct.pack("<H", 参数长度))
-        if 参数长度 > 0:
-            流数据.extend(struct.pack(f"{参数长度}i", *self.参数))
+        self.参数长度 = len(self.参数)
+        流数据.extend(struct.pack("<H", self.参数长度))
+        if self.参数长度 > 0:
+            流数据.extend(struct.pack(f"{self.参数长度}i", *self.参数))
         return 流数据
+
+    def 长度压缩(self) -> None:
+        # 砍掉末尾的0
+        最后一个非0数序号 = next(
+            (i for i in reversed(range(len(self.参数))) 
+            if int(self.参数[i]) != 0
+        ), -1)
+        self.参数 = self.参数[:最后一个非0数序号 + 1]
+
+    def 长度还原(self) -> None:
+        if self.参数长度 < len(self.参数):
+            raise ValueError("原始长度不能小于当前长度")
+        self.参数.extend([类型.Int32(0)] * (self.参数长度 - len(self.参数)))
+
+    def 转json(self) -> str:
+        self.长度压缩()
+        return {
+            "参数": self.参数,
+            "参数长度": self.参数长度,
+            "参数类型": self.参数类型,
+        }
 
     @classmethod
     def 由json转换(cls, 数据字典):
-        return cls(**数据字典)
+        参数 = cls(**数据字典)
+        参数.长度压缩()
+        return 参数
 
     def 尝试解析(self, 模型) -> 额外参数:
+        self.长度还原()
         if len(self.参数) == 0:
             return 额外参数之空白()
         elif 模型 not in 额外参数对应关系:
@@ -109,14 +135,6 @@ class 额外参数之传送带(额外参数):
         流数据 = bytearray()
         流数据.extend(struct.pack("<Hii", 2, self.图标ID.转int(), self.图标数字))
         return 流数据
-
-    # 充分利用未定义行为,未经过测试,就先扔这里再说
-    def 有损压缩转解析前(self) -> bytes:
-        if self.图标ID.转int() == 0:
-            return 额外参数之空白()
-        elif self.图标数字 == 0:
-            return 额外参数之未解析([类型.Int32(self.图标ID.转int())])
-
 
 @dataclass
 class 额外参数之分拣器(额外参数):
@@ -206,62 +224,39 @@ class 额外参数之制造类建筑(额外参数):
 
 
 # 塔
-class BpEnumMixIn(蓝图基类):
-    def __init__(self, *args, **kwargs):
-        super().__init__()
+class 运输模式(IntEnum):
+    存储 = 0
+    供应 = 1
+    浮球 = 2
 
-    def 转json(self):
-        return self.name
+class 锁定模式(IntEnum):
+    不设置 = 0
+    满仓 = 1
+    一半 = 2
+    空仓 = 3
 
-    @classmethod
-    def 由json转换(cls, name):
-        return cls[name]
-
-    def __repr__(self):
-        return Enum.__repr__(self)
-
-    __eq__ = Enum.__eq__
-
-
-class Role(BpEnumMixIn, Enum):
-    STORAGE = 0
-    SUPPLY = 1
-    DEMAND = 2
-
-
-class LockAmount(BpEnumMixIn, Enum):
-    NOTSET = 0
-    FULL = 1
-    HALF = 2
-    EMPTY = 3
-
-
-class Direction(BpEnumMixIn, Enum):
-    NOTSET = 0
-    IN = 1
-    OUT = 2
-
-
-ItemID = 图标
-
+class 方向(IntEnum):
+    不设置 = 0
+    进 = 1
+    出 = 2
 
 @dataclass
 class Storage(蓝图dataclass基类):
-    item_id: ItemID
-    local_role: Role
-    remote_role: Role
-    max: int
-    lockAmount: LockAmount
+    item_id: 图标
+    local_运输模式: 运输模式
+    remote_运输模式: 运输模式
+    max: 类型.Int32
+    lockAmount: 锁定模式
 
     @classmethod
     def from_params(cls, p):
-        return cls(ItemID(p[0]), Role(p[1]), Role(p[2]), p[3], LockAmount(p[4]))
+        return cls(图标(p[0]), 运输模式(p[1]), 运输模式(p[2]), p[3], 锁定模式(p[4]))
 
     def to_params(self):
         return [
             self.item_id.序号,
-            self.local_role.value,
-            self.remote_role.value,
+            self.local_运输模式.value,
+            self.remote_运输模式.value,
             self.max,
             self.lockAmount.value,
             0,
@@ -270,12 +265,12 @@ class Storage(蓝图dataclass基类):
 
 @dataclass
 class Slot(蓝图dataclass基类):
-    dir: Direction
+    dir: 方向
     storage_idx: int
 
     @classmethod
     def from_params(cls, p):
-        return cls(Direction(p[0]), p[1])
+        return cls(方向(p[0]), p[1])
 
     def to_params(self):
         return [
@@ -354,7 +349,6 @@ class 额外参数之物流塔(额外参数):
             )
         )
         params = params + [0] * (2048 - len(params))
-        print(params)
         流数据 = bytearray()
         流数据.extend(struct.pack("<H" + "i" * 2048, 2048, *params))
         return 流数据
