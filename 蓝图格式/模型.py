@@ -83,15 +83,19 @@ class 模型(蓝图基类):
         return self.序号 in [35, 36, 37]
 
     def 是熔炉吗(self):
+        # 红 白
         return self.序号 in [457, 194, 62]
 
     def 是制造台吗(self):
+        # 黑 蓝 绿 黄
         return self.序号 in [456, 67, 66, 65]
 
     def 是化工厂吗(self):
+        # 蓝 白
         return self.序号 in [376, 64]
 
     def 是研究站吗(self):
+        # 黑 白
         return self.序号 in [455, 70]
 
     def 是制造建筑吗(self):
@@ -103,4 +107,7 @@ class 模型(蓝图基类):
             self.序号 in [63, 69] # 是原油萃取站吗或量子对撞机吗
 
     def 是塔吗(self):
+        # 小塔 大塔
+        # 严格意义上 轨道采集器和大型采矿机也算塔。
+        # 但这里先不算了
         return self.序号 in [49, 50]
