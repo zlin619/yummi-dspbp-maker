@@ -101,8 +101,6 @@ class 额外参数之未解析(额外参数):
 class 解析后额外参数(额外参数):
     @classmethod
     def 由json转换(cls, 数据字典):
-        print(cls)
-        print(数据字典)
         return 由json转换为类型(cls, 数据字典)
 
     def 转比特流(self):
@@ -284,7 +282,6 @@ class 额外参数之物流塔(解析后额外参数):
         )
 
     def 转比特流(self) -> bytes:
-        print(self)
         params = list(
             chain(
                 *[x.to_params() for x in self.格子],
