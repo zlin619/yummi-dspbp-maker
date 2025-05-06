@@ -1,7 +1,7 @@
 from 蓝图格式.中段 import 蓝图中段
 from 蓝图格式.区域 import 区域
 from 蓝图格式.蓝图 import 蓝图
-
+from 功能.格式查找 import 蓝图内查找
 
 # 把蓝图的区域和锚点归到 1 * 1
 # 这个功能可以让蓝图可以跨纬度铺设
@@ -22,17 +22,12 @@ def _单锚点(本区域: 区域) -> 区域:
 
 def 转换为单锚点(输入数据) -> 区域:
     # 修改区域为新区域
-    if isinstance(输入数据, 蓝图):
-        return 转换为单锚点(输入数据.蓝图中段.区域)
-    elif isinstance(输入数据, 蓝图中段):
-        return 转换为单锚点(输入数据.区域)
-    elif isinstance(输入数据, list):
-        旧区域 = _确保区域唯一(输入数据)
-        return 转换为单锚点(旧区域)
-    elif isinstance(输入数据, 区域):
+    if isinstance(输入数据, 区域):
         return _单锚点(输入数据)
     else:
-        raise TypeError(f"输入{输入数据.__class__}必须是 蓝图、蓝图中段、区域列表 或 单个区域。")
+        所有区域 = 蓝图内查找(输入数据).所有区域()
+        旧区域 = _确保区域唯一(输入数据)
+        return 转换为单锚点(旧区域)
 
 
 # 这个功能并没有什么正面作用
