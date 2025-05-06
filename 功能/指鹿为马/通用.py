@@ -5,10 +5,6 @@ from 蓝图格式.坐标 import 普通建筑姿态
 from 蓝图格式.坐标 import 传送带姿态
 from 蓝图格式.坐标 import 分拣器姿态
 from 蓝图格式.坐标 import 全空间姿态
-from 功能.格式查找 import 蓝图内查找
-
-from typing import Any, List
-
 
 # 简单替换物品ID会原地爆炸
 # 因为建筑的姿态(坐标和旋转)跟着itmID走
