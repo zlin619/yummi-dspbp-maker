@@ -5,8 +5,54 @@ import 蓝图格式.类型 as 类型
 from typing import List
 from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 
+@dataclass
+class 虚平面坐标(蓝图dataclass基类):
+    def 坐标平移(self, 输入坐标):
+        self.东西X += 输入坐标.东西X
+        self.南北Y += 输入坐标.南北Y
+    def 坐标缩放(self, 输入坐标):
+        self.东西X *= 输入坐标.东西X
+        self.南北Y *= 输入坐标.南北Y
 
-class 姿态(蓝图dataclass基类):
+@dataclass
+class 虚空间坐标(蓝图dataclass基类):
+    def 坐标平移(self, 输入坐标):
+        self.东西X += 输入坐标.东西X
+        self.南北Y += 输入坐标.南北Y
+        self.高度Z += 输入坐标.高度Z
+    def 坐标缩放(self, 输入坐标):
+        self.东西X *= 输入坐标.东西X
+        self.南北Y *= 输入坐标.南北Y
+        self.高度Z *= 输入坐标.高度Z
+
+@dataclass
+class 空间坐标(虚空间坐标):
+    东西X: float
+    南北Y: float
+    高度Z: float
+
+@dataclass
+class 平面坐标(虚平面坐标):
+    东西X: float
+    南北Y: float
+    def 坐标平移(self, 输入坐标):
+        self.东西X += 输入坐标.东西X
+        self.南北Y += 输入坐标.南北Y
+
+
+@dataclass
+class Int16平面坐标(虚平面坐标):
+    东西X: 类型.Int16
+    南北Y: 类型.Int16
+
+
+@dataclass
+class Int32平面坐标(虚平面坐标):
+    东西X: 类型.Int32
+    南北Y: 类型.Int32
+
+
+class 姿态(虚空间坐标):
     # 伪纯虚基类
     def 转比特流(self) -> bytes:
         raise NotImplementedError("伪纯虚基类，还想执行方法，想屁吃？")
@@ -55,7 +101,6 @@ class 全空间姿态(姿态):
     @classmethod
     def 由json转换(cls, 数据字典):
         return 全空间姿态(**数据字典)
-
 
 # 全空间姿态 到此为止
 
@@ -116,6 +161,7 @@ class 普通建筑姿态(姿态):
     def 由json转换(cls, 数据字典):
         return 普通建筑姿态(**数据字典)
 
+
 # 普通建筑姿态 到此为止
 @dataclass
 class 分拣器姿态(姿态):
@@ -139,32 +185,15 @@ class 分拣器姿态(姿态):
             终点=全空间姿态.由json转换(数据字典["终点"])
         )
 
+    def 坐标平移(self, 输入坐标: 空间坐标):
+        self.起点.坐标平移(输入坐标)
+        self.终点.坐标平移(输入坐标)
 
+    def 坐标缩放(self, 输入坐标: 空间坐标):
+        self.起点.坐标缩放(输入坐标)
+        self.终点.坐标缩放(输入坐标)
 # 分拣器姿态 到此为止
 
 
-@dataclass
-class 空间坐标(蓝图dataclass基类):
-    东西X: float
-    南北Y: float
-    高度Z: float
-
-
-@dataclass
-class 平面坐标(蓝图dataclass基类):
-    东西X: float
-    南北Y: float
-
-
-@dataclass
-class Int16平面坐标(蓝图dataclass基类):
-    东西X: 类型.Int16
-    南北Y: 类型.Int16
-
-
-@dataclass
-class Int32平面坐标(蓝图dataclass基类):
-    东西X: 类型.Int32
-    南北Y: 类型.Int32
 
 # 横为东西 纵为南北
