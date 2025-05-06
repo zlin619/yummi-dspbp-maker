@@ -69,9 +69,6 @@ class 姿态(虚空间坐标):
             return 分拣器姿态.由json转换(数据字典)
         else:
             raise NotImplementedError("伪纯虚基类，还想执行方法，想屁吃？")
-        
-    def 坐标平移(self, 输入坐标: 空间坐标):
-        raise NotImplementedError("伪纯虚基类，还想执行方法，想屁吃？")
 
 
 @dataclass
