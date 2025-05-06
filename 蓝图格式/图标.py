@@ -25,8 +25,6 @@ class 图标(蓝图基类):
         return 图标.序号转名字(self.序号)
 
     def __eq__(self, other):
-        if other.isdigit():
-            other = int(other)
         if isinstance(other, 图标):
             return self.序号 == other.序号
         elif isinstance(other, int):
@@ -70,3 +68,19 @@ class 图标(蓝图基类):
     @classmethod
     def 由json转换(cls, 数据字典):
         return 图标(数据字典)
+
+    # 基础功能 #
+
+    # 拓展功能 #
+
+    # 大部分情况下, 模型决定功能而非物品ID。
+    # 因此，判定建筑最好用模型序号
+    # 但是姿态是由itemID决定的
+    def 是传送带吗(self):
+        return 2000 < self.序号 < 2010
+    
+    def 是分拣器吗(self):
+        return 2010 <= self.序号 < 2020
+
+物品 = 图标
+科技 = 图标

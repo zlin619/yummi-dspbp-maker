@@ -5,10 +5,10 @@ from 蓝图格式 import 类型
 from 蓝图格式.中段 import 蓝图中段
 from 蓝图格式.中段杂项 import 中段杂项
 from 蓝图格式.区域 import 区域
-from 蓝图格式.图标 import 图标 as 图标类
+from 蓝图格式.图标 import 图标
 from 蓝图格式.坐标 import Int32平面坐标, Int16平面坐标, 普通建筑姿态, 传送带姿态, 全空间姿态, 分拣器姿态
 from 蓝图格式.建筑 import 建筑, 建筑主导接口
-from 蓝图格式.模型 import 模型 as 模型类
+from 蓝图格式.模型 import 模型
 from 蓝图格式.额外参数 import 额外参数之未解析
 
 
@@ -152,9 +152,14 @@ class 比特流解析器:
                 areaIndex,
             ) = self.解析("<iHHb")
 
-            if 2000 < itemId < 2010:
+            l_建筑序号=类型.Int32(index)
+            l_区域序号=类型.Int8(areaIndex)
+            l_物品序号=图标(itemId)
+            l_模型序号=模型(modelIndex)
+
+            if l_物品序号.是传送带吗():
                 姿态 = self.解析传送带姿态()
-            elif 2010 <= itemId < 2020:
+            elif l_物品序号.是分拣器吗():
                 姿态 = self.解析分拣器姿态()
             else:
                 姿态 = self.解析普通建筑姿态()
@@ -178,7 +183,7 @@ class 比特流解析器:
                 参数长度 = parameterLength,
                 参数=[类型.Int32(x) for x in parameter]
             )
-            l_额外参数 = l_额外参数.尝试解析(模型类(modelIndex))
+            l_额外参数 = l_额外参数.尝试解析(模型(modelIndex))
 
             输出接口 = 建筑主导接口(
                 目标序号=类型.Int32(outputObjIdx),
@@ -194,15 +199,15 @@ class 比特流解析器:
             )
 
             当前建筑 = 建筑(
-                建筑序号=类型.Int32(index),
-                区域序号=类型.Int8(areaIndex),
-                物品序号=图标类(itemId),
-                模型序号=模型类(modelIndex),
+                建筑序号=l_建筑序号,
+                区域序号=l_区域序号,
+                物品序号=l_物品序号,
+                模型序号=l_模型序号,
                 空间姿态=姿态,
                 输出接口=输出接口,
                 输入接口=输入接口,
                 配方序号=类型.UInt16(recipeId),
-                过滤物品序号=图标类(filterId),
+                过滤物品序号=图标(filterId),
                 额外参数=l_额外参数
             )
             所有建筑.append(当前建筑)

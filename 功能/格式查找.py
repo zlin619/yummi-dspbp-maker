@@ -22,21 +22,32 @@ class 蓝图内查找:
                 raise Exception("鬼知道你输入了个什么东西")
 
     def 本蓝图(self):
-        if not hasattr(self, '蓝图'):
+        if not hasattr(self, 'l_本蓝图'):
             raise Exception("啥都没有找个锤子")
-        return self.l_所有区域
+        return self.l_本蓝图
 
     def 本蓝图中段(self):
-        if not hasattr(self, '所有区域'):
+        if not hasattr(self, 'l_所有区域'):
             self.l_本蓝图中段 = self.本蓝图().蓝图中段
-            return self.l_本蓝图中段
+        return self.l_本蓝图中段
+
+    def 本蓝图头部(self):
+        if not hasattr(self, 'l_本蓝图头部'):
+            self.l_本蓝图头部 = self.本蓝图().蓝图头部
+        return self.l_本蓝图头部
 
     def 所有区域(self):
-        if not hasattr(self, '所有区域'):
+        if not hasattr(self, 'l_所有区域'):
             self.l_所有区域 = self.本蓝图中段().区域
-            return self.l_所有区域
+        return self.l_所有区域
         
     def 所有建筑(self):
-        if not hasattr(self, '所有区域'):
-            self.l_所有区域 = self.本蓝图中段().建筑
-            return self.l_所有区域
+        if not hasattr(self, 'l_所有建筑'):
+            self.l_所有建筑 = self.本蓝图中段().建筑
+        return self.l_所有建筑
+
+    def 缩略图(self):
+        if not hasattr(self, 'l_缩略图'):
+            self.l_缩略图 = self.本蓝图头部().缩略图
+        return self.l_缩略图
+

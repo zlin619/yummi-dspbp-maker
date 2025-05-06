@@ -2,6 +2,7 @@ import struct
 from dataclasses import dataclass
 
 import 蓝图格式.类型 as 类型
+from typing import List
 from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 
 
@@ -38,16 +39,18 @@ class 全空间姿态(姿态):
     ########################
     # 以上为字段，以下为函数 #
     ########################
-    def 转比特流(self) -> bytes:
-        return struct.pack(
-            "<6f",
+    def 转数组(self) -> List[float]:
+        return [
             self.东西X,
             self.南北Y,
             self.高度Z,
             self.水平旋转Z,
             self.左右倾斜X,
             self.上下翻滚Y
-        )
+        ]
+
+    def 转比特流(self) -> bytes:
+        return struct.pack("<6f", *self.转数组())
 
     @classmethod
     def 由json转换(cls, 数据字典):
@@ -68,15 +71,17 @@ class 传送带姿态(姿态):
     ########################
     # 以上为字段，以下为函数 #
     ########################
-    def 转比特流(self) -> bytes:
-        return struct.pack(
-            "<5f",
+    def 转数组(self) -> List[float]:
+        return [
             self.东西X,
             self.南北Y,
             self.高度Z,
             self.水平旋转Z,
-            self.左右倾斜X
-        )
+            self.左右倾斜X,
+        ]
+
+    def 转比特流(self) -> bytes:
+        return struct.pack("<5f", *self.转数组())
 
     @classmethod
     def 由json转换(cls, 数据字典):
@@ -96,14 +101,16 @@ class 普通建筑姿态(姿态):
     ########################
     # 以上为字段，以下为函数 #
     ########################
-    def 转比特流(self) -> bytes:
-        return struct.pack(
-            "<4f",
+    def 转数组(self) -> List[float]:
+        return [
             self.东西X,
             self.南北Y,
             self.高度Z,
-            self.水平旋转Z
-        )
+            self.水平旋转Z,
+        ]
+
+    def 转比特流(self) -> bytes:
+        return struct.pack("<4f", *self.转数组())
 
     @classmethod
     def 由json转换(cls, 数据字典):
@@ -119,6 +126,9 @@ class 分拣器姿态(姿态):
     ########################
     # 以上为字段，以下为函数 #
     ########################
+    def 转数组(self) -> List[float]:
+        return self.起点.转数组() + self.终点.转数组()
+
     def 转比特流(self) -> bytes:
         return self.起点.转比特流() + self.终点.转比特流()
 

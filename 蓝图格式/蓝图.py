@@ -50,13 +50,10 @@ class 时间戳(蓝图基类):
 
 
 class url字符串(蓝图基类):
-    url: str
+    自然字符串: str
 
     def __init__(self, 输入):
-        self.url = 输入
-
-    def __repr__(self):
-        return self.url
+        self.自然字符串 = 输入
 
     @staticmethod
     def 转自然字符串(url: str) -> str:
@@ -67,14 +64,18 @@ class url字符串(蓝图基类):
         return quote(自然字符串)
 
     def 转json(self) -> str:
-        return url字符串.转自然字符串(self.url)
+        return self.自然字符串
 
     @classmethod
-    def 由json转换(cls, 数据字典):
-        return url字符串(url字符串.转url字符串(数据字典))
+    def 由json转换(cls, 输入字符串):
+        return url字符串(输入字符串)
+
+    @staticmethod
+    def 从url构造(url: str) -> str:
+        return url字符串(url字符串.转自然字符串(url))
 
     def 转蓝图字符串(self):
-        return self.url
+        return self.转url字符串(self.自然字符串)
 
 
 @dataclass
