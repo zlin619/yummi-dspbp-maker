@@ -62,7 +62,10 @@ class 图标(蓝图基类):
     def 转int(self) -> int:
         return self.序号
 
-    def 转json(self):
+    def 转名字(self) -> str:
+        return 图标.序号转名字(self.序号)
+
+    def 转json(self) -> str:
         return 图标.序号转名字(self.序号)
 
     @classmethod
@@ -81,6 +84,9 @@ class 图标(蓝图基类):
     
     def 是分拣器吗(self):
         return 2010 <= self.序号 < 2020
+    
+    def 是四向吗(self):
+        return self.序号 == 2020
 
 物品 = 图标
 科技 = 图标

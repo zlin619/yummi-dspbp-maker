@@ -60,7 +60,10 @@ class 模型(蓝图基类):
     def 转int(self) -> int:
         return self.序号
 
-    def 转json(self):
+    def 转名字(self) -> str:
+        return 模型.序号转名字(self.序号)
+
+    def 转json(self) -> str:
         return 模型.序号转名字(self.序号)
 
     @classmethod
@@ -111,3 +114,6 @@ class 模型(蓝图基类):
         # 严格意义上 轨道采集器和大型采矿机也算塔。
         # 但这里先不算了
         return self.序号 in [49, 50]
+
+    def 是四向吗(self):
+        return self.序号 in [38, 39, 40]

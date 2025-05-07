@@ -1,3 +1,4 @@
+import copy
 import 日志
 from 蓝图格式.蓝图 import 图标
 from 蓝图格式.建筑 import 建筑
@@ -48,8 +49,8 @@ class 物品替换():
             self._姿态数组.append(0)
             self._姿态数组 = self._姿态数组[:6]
             l_起点 = 全空间姿态(*self._姿态数组)
-            l_终点 = l_起点.copy()
-            self._建筑.姿态 = 分拣器姿态(起点 = l_起点, 终点 = l_终点)
+            l_终点 = copy.deepcopy(l_起点)
+            self._建筑.空间姿态 = 分拣器姿态(起点 = l_起点, 终点 = l_终点)
         self._建筑.物品序号 = 物品ID
 
     def 为(self, 物品ID: 图标):
