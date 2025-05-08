@@ -40,7 +40,7 @@ class 模型(蓝图基类):
         if 序号 in 序号转模型:
             return 序号转模型[序号]
         日志.警告(f"未知模型序号: {序号}")
-        return "未知模型{序号}"
+        return f"未知模型{序号}"
 
     @staticmethod
     def 名字转序号(名字: str) -> int:

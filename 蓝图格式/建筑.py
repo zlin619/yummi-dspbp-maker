@@ -2,6 +2,7 @@ import struct
 from dataclasses import dataclass
 from typing import Any
 
+import 日志
 import 蓝图格式.坐标 as 坐标格式
 import 蓝图格式.类型 as 类型
 from 蓝图格式.图标 import 图标
@@ -39,13 +40,28 @@ class 建筑(蓝图dataclass基类):
 
     # TODO:
     # 以下并非正式数据的一部分
-    # 被动链接: Any = None
-    # 玩家标注: Any = None
+    接口测序: Any = None
+    建筑标记: Any = None
+    玩家标注: Any = None
 
     ########################
     # 以上为字段，以下为函数 #
     ########################
+    def 检查姿态(self):
+        def 姿态告警():
+            日志.告警(f"物品类型{self.物品序号}和空间姿态{self.空间姿态.__class__}不匹配")
+        if self.物品序号.是传送带吗():
+            if not isinstance(self.空间姿态, 坐标格式.传送带姿态):
+                姿态告警()
+        elif self.物品序号.是分拣器吗():
+            if not isinstance(self.空间姿态, 坐标格式.分拣器姿态):
+                姿态告警()
+        else:
+            if not isinstance(self.空间姿态, 坐标格式.普通建筑姿态):
+                姿态告警()
+
     def 转比特流(self) -> bytes:
+        self.检查姿态()
         流数据 = bytearray()
         流数据.extend(struct.pack("<i", -101))
         流数据.extend(
@@ -75,7 +91,6 @@ class 建筑(蓝图dataclass基类):
         )
         流数据.extend(self.额外参数.转比特流())
         return 流数据
-
     # 转比特流 到此为止
 
 

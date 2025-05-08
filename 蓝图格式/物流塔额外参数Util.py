@@ -11,7 +11,7 @@ from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 class 运输模式(IntEnum):
     存储 = 0
     供应 = 1
-    浮球 = 2
+    需求 = 2
 
 class 沙盒锁定模式(IntEnum):
     不设置 = 0
@@ -56,7 +56,7 @@ class 物流塔格子(蓝图dataclass基类):
 @dataclass
 class 带子出口(蓝图dataclass基类):
     朝向: 带进出塔
-    接口建筑索引: 类型.Int32
+    物品栏索引: 类型.Int32 # 对应第几个物品栏
 
     @classmethod
     def 由数组构造(cls, p):
