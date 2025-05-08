@@ -55,6 +55,9 @@ class url字符串(蓝图基类):
     def __init__(self, 输入):
         self.自然字符串 = 输入
 
+    def __repr__(self):
+        return self.自然字符串
+
     @staticmethod
     def 转自然字符串(url: str) -> str:
         return unquote(url)
