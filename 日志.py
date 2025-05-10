@@ -16,6 +16,9 @@ def 调试(警告信息):
 def 信息(警告信息):
     日志("信息: " + 警告信息)
 
+def 未完成的函数(str):
+    raise Exception("函数还没写完")
+
 def 日志(str):
     print(str)
 

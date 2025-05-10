@@ -1,15 +1,22 @@
 import struct
 from dataclasses import dataclass
-from copy import deepcopy
+from enum import IntEnum, auto
 from typing import Any
-
 import 日志
-import 蓝图格式.坐标 as 坐标格式
-import 蓝图格式.类型 as 类型
+from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 from 蓝图格式.图标 import 图标
 from 蓝图格式.模型 import 模型
-from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 from 蓝图格式.额外参数 import 额外参数
+from 蓝图格式.接口分析.多接口分析 import 多接口分析
+import 蓝图格式.坐标 as 坐标格式
+import 蓝图格式.类型 as 类型
+
+class 建筑类型分析(IntEnum):
+    未分析 = auto()
+    未知 = auto()
+    无特殊性 = auto()
+    带拆除 = auto()
+    仙术地基 = auto()
 
 @dataclass
 class 建筑主导接口(蓝图dataclass基类):
@@ -58,8 +65,8 @@ class 建筑(蓝图dataclass基类):
 
     # TODO:
     # 以下并非正式数据的一部分
-    悠米_接口分析: Any = None
-    悠米_建筑标记: Any = None
+    悠米_接口分析: 多接口分析
+    悠米_建筑类型: 建筑类型分析
     悠米_玩家标注: Any = None
 
     ########################

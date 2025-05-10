@@ -10,10 +10,13 @@ from 蓝图格式.蓝图基础类型 import 蓝图基类
 class 模型(蓝图基类):
     # 基础功能 #
     def __init__(self, 标识: Union[int, str]):
-        if isinstance(标识, int):
+        if isinstance(标识, str):
+            if 标识.isdigit():
+                self.序号 = int(标识) 
+            else:
+                self.序号 = 模型.名字转序号(标识)
+        elif isinstance(标识, int):
             self.序号 = 标识
-        elif isinstance(标识, str):
-            self.序号 = 模型.名字转序号(标识)
         else:
             raise TypeError("输入类型必须是int或str")
 
