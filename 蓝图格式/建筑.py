@@ -70,6 +70,7 @@ class 建筑(蓝图dataclass基类):
     def 检查姿态(self):
         def 姿态告警():
             日志.告警(f"物品类型{self.物品序号}和空间姿态{self.空间姿态.__class__}不匹配。这可能导致蓝图无法读取。")
+            日志.告警(f"建议:from 功能.指鹿为马.通用 import 强制纠正姿态; 强制纠正姿态(蓝图)")
         if self.物品序号.是传送带吗():
             if not isinstance(self.空间姿态, 坐标格式.传送带姿态):
                 姿态告警()
