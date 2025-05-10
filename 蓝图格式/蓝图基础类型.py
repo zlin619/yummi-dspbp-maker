@@ -49,7 +49,7 @@ class 蓝图基类:
 
 @dataclass
 class 蓝图dataclass基类(蓝图基类):
-    def 转json(self):
+    def 原始函数_转json(self):
         结果 = {}
         for field in fields(self):
             if field.name.startswith('_'):  # 跳过私有字段
@@ -66,8 +66,15 @@ class 蓝图dataclass基类(蓝图基类):
         return 结果
 
     @classmethod
-    def 由json转换(cls, 数据字典: dict):
+    def 原始函数_由json转换(cls, 数据字典: dict):
         return _字典转换器.转换为class(cls, 数据字典)
+
+    def 转json(self):
+        return self.原始函数_转json()
+
+    @classmethod
+    def 由json转换(cls, 数据字典: dict):
+        return cls.原始函数_由json转换(数据字典)
 
 
 def 由json转换为类型(类型, 数据字典: dict):
