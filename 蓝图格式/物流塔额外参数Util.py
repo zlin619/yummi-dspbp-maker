@@ -65,7 +65,7 @@ class 带子出口(蓝图dataclass基类):
     def 转二进制数组(self):
         return [
             self.朝向.value,
-            self.接口建筑索引,
+            self.物品栏索引,
             0,
             0,
         ]
