@@ -28,7 +28,7 @@ class 额外参数(蓝图dataclass基类):
     def 由json转换(cls, 数据字典):
         if 数据字典["参数类型"] == "未解析":
             return 额外参数之未解析.由json转换(数据字典)
-        elif 数据字典["参数类型"] == "空白":
+        elif 数据字典["参数类型"] == "未定义":
             return 额外参数之空白.由json转换(数据字典)
         elif 数据字典["参数类型"] == "传送带":
             return 额外参数之传送带.由json转换(数据字典)
@@ -93,7 +93,7 @@ class 额外参数之未解析(额外参数):
             raise ValueError("原始长度不能小于当前长度")
         self.参数.extend([类型.Int32(0)] * (self.参数长度 - len(self.参数)))
 
-    def 转json(self) -> str:
+    def 转json(self) -> dict:
         self.长度压缩()
         return {
             "参数": self.参数,
@@ -138,7 +138,7 @@ class 解析后额外参数(额外参数):
 
 @dataclass
 class 额外参数之空白(解析后额外参数):
-    参数类型: str = "空白"
+    参数类型: str = "未定义"
     def 去解析(self) -> 额外参数之未解析:
         return 额外参数之未解析(参数长度=0, 参数=[])
 

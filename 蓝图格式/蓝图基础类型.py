@@ -8,7 +8,7 @@ class 布尔值(IntEnum):
     是 = 1
 
 class _字典转换器:
-    # 尽可能不要使用这个类
+    # 尽可能不要在外部使用这个类
     @staticmethod
     def 转换字段值(字段类型: Type, 字段值: Any) -> dict | list:
         原始字段 = get_origin(字段类型)
@@ -46,7 +46,7 @@ class 蓝图基类:
     def 由json转换(cls, 数据字典: dict):
         raise NotImplementedError(f"谢谢你，这个算虚基类方法，请重写方法。类名：{cls}")
 
-
+# from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 @dataclass
 class 蓝图dataclass基类(蓝图基类):
     def 原始函数_转json(self):

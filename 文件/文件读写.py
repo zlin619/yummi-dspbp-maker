@@ -97,4 +97,4 @@ def 建筑蓝图目录() -> str:
     l_我的文档 = os.path.expanduser('~/Documents')
     l_蓝图目录 = os.path.join(l_我的文档, 'Dyson Sphere Program', 'Blueprint')
     l_蓝图目录 = os.path.normpath(l_蓝图目录)
-    return l_蓝图目录()
+    return l_蓝图目录

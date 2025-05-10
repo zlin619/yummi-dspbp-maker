@@ -18,6 +18,9 @@ class 建筑主导接口(蓝图dataclass基类):
     自身接口: 类型.Int8 = -1
     插槽偏移: 类型.Int8 = 0
     # 晨隐说插槽偏移常见于分拣器, 但我不知道这玩意干嘛的
+    def 为空(self):
+        return self.目标序号 == -1
+
     def 转json(self):
         if self.目标序号 != -1:
             return self.原始函数_转json()
@@ -55,7 +58,7 @@ class 建筑(蓝图dataclass基类):
 
     # TODO:
     # 以下并非正式数据的一部分
-    悠米_接口测序: Any = None
+    悠米_接口分析: Any = None
     悠米_建筑标记: Any = None
     悠米_玩家标注: Any = None
 
@@ -97,13 +100,13 @@ class 建筑(蓝图dataclass基类):
         流数据.extend(self.空间姿态.转比特流())
         流数据.extend(
             struct.pack(
-                "<iiBBBBBBHH",
+                "<iibbbbbbHH",                
                 self.输出接口.目标序号,
                 self.输入接口.目标序号,
                 self.输出接口.目标接口,
-                self.输入接口.自身接口,
-                self.输出接口.自身接口,
                 self.输入接口.目标接口,
+                self.输出接口.自身接口,
+                self.输入接口.自身接口,
                 self.输出接口.插槽偏移,
                 self.输入接口.插槽偏移,
                 self.配方序号,
