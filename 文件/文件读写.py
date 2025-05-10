@@ -89,3 +89,12 @@ def 读取泛蓝图文件(文件路径: str) -> 蓝图:
 
 def 工程目录() -> str:
     return __file__.split("文件")[0]
+
+# 返回戴森球计划的蓝图目录
+# TODO: 未测试
+def 建筑蓝图目录() -> str:
+    import os
+    l_我的文档 = os.path.expanduser('~/Documents')
+    l_蓝图目录 = os.path.join(l_我的文档, 'Dyson Sphere Program', 'Blueprint')
+    l_蓝图目录 = os.path.normpath(l_蓝图目录)
+    return l_蓝图目录()
