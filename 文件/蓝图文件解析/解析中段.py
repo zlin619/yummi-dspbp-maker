@@ -176,7 +176,7 @@ class 比特流解析器:
                 recipeId,
                 filterId,
                 parameterLength,
-            ) = self.解析("iiBBBBBBHHH")
+            ) = self.解析("iibbbbbbHHH")
 
             parameter = self.解析("i" * parameterLength)
             l_额外参数 = 额外参数之未解析(
@@ -193,8 +193,8 @@ class 比特流解析器:
             )
             输入接口 = 建筑主导接口(
                 目标序号=类型.Int32(inputObjIdx),
-                目标接口=类型.Int8(inputToSlot),
-                自身接口=类型.Int8(inputFromSlot),
+                目标接口=类型.Int8(inputFromSlot),
+                自身接口=类型.Int8(inputToSlot),
                 插槽偏移=类型.Int8(inputOffset)
             )
 

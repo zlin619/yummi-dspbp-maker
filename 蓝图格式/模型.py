@@ -6,7 +6,7 @@ from 蓝图格式.序号字典.模型转序号 import 模型转序号
 from 蓝图格式.序号字典.绰号转真名 import 绰号转真名
 from 蓝图格式.蓝图基础类型 import 蓝图基类
 
-
+# from 蓝图格式.模型 import 模型
 class 模型(蓝图基类):
     # 基础功能 #
     def __init__(self, 标识: Union[int, str]):
