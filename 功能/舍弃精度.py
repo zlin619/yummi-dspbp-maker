@@ -3,6 +3,7 @@ from 蓝图格式.蓝图 import 蓝图
 from 蓝图格式.坐标 import 传送带姿态
 from 蓝图格式.坐标 import 普通建筑姿态
 from 功能.格式查找 import 蓝图内查找
+
 def 舍弃精度(输入, 精度容忍=1/1024):
     近似 = round(输入)
     if abs(输入 - 近似) < 精度容忍:
@@ -12,7 +13,6 @@ def 舍弃精度(输入, 精度容忍=1/1024):
     if abs(八倍 - 八倍近似) < 精度容忍 / 8:
         return 八倍近似 / 8
     return 输入
-
 
 class 批量舍弃精度:
     def __init__(self, 输入数据):

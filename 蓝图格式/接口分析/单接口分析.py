@@ -5,13 +5,14 @@ from 蓝图格式 import 类型
 from 蓝图格式.模型 import 模型
 
 import 日志
-日志.警告("你在使用一个没写完的py")
 
 class 接口类型(IntEnum):
     未知 = auto()
     堆叠 = auto()
     传送带 = auto()
     分拣器 = auto()
+    传送带之间 = auto()
+    传送带对普通建筑 = auto()
 
 class 接口主导者(IntEnum):
     自身 = 0
@@ -52,11 +53,8 @@ class 建筑预览(蓝图dataclass基类):
         else:
             return self.原始函数_转json()
 
-class 接口分析(蓝图dataclass基类):
-    pass
-
 @dataclass
-class 接口已分析(接口分析):
+class 单接口分析(蓝图dataclass基类):
     自身接口序号: 类型.Int8
     目标接口序号: 类型.Int8
     主导者: 接口主导者
@@ -66,11 +64,7 @@ class 接口已分析(接口分析):
     终点建筑: 建筑预览
     链接类型: 接口类型
 
+    @classmethod
     def 由json转换(cls, 数据字典):
         # 不如重测
         return None
-    
-@dataclass
-class 接口未分析(接口分析):
-    def 转json(self):
-        return "接口未分析"

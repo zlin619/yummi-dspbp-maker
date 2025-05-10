@@ -7,7 +7,8 @@ from 蓝图格式.中段杂项 import 中段杂项
 from 蓝图格式.区域 import 区域
 from 蓝图格式.图标 import 图标
 from 蓝图格式.坐标 import Int32平面坐标, Int16平面坐标, 普通建筑姿态, 传送带姿态, 全空间姿态, 分拣器姿态
-from 蓝图格式.建筑 import 建筑, 建筑主导接口
+from 蓝图格式.建筑 import 建筑, 建筑主导接口, 建筑类型分析
+from 蓝图格式.接口分析.多接口分析 import 多接口分析
 from 蓝图格式.模型 import 模型
 from 蓝图格式.额外参数 import 额外参数之未解析
 
@@ -208,7 +209,10 @@ class 比特流解析器:
                 输入接口=输入接口,
                 配方序号=类型.UInt16(recipeId),
                 过滤物品序号=图标(filterId),
-                额外参数=l_额外参数
+                额外参数=l_额外参数,
+
+                悠米_接口分析 = 多接口分析(),
+                悠米_建筑类型 = 建筑类型分析.无特殊性,
             )
             所有建筑.append(当前建筑)
         return 所有建筑
