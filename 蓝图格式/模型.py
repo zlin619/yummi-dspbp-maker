@@ -19,6 +19,9 @@ class 模型(蓝图基类):
         else:
             raise TypeError("输入类型必须是int或str")
 
+    def __hash__(self):
+        return hash(self.序号)
+
     def __repr__(self):
         return 模型.序号转名字(self.序号)
 

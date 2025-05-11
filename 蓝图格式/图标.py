@@ -24,6 +24,9 @@ class 图标(蓝图基类):
         else:
             raise TypeError("输入类型必须是int或str")
 
+    def __hash__(self):
+        return hash(self.序号)
+
     def __repr__(self):
         return 图标.序号转名字(self.序号)
 
@@ -84,6 +87,14 @@ class 图标(蓝图基类):
             return 图标转序号[名字]
         raise ValueError(f"未知的图标名字: {名字}")
 
+    @staticmethod
+    def 序号转真名(序号: int) -> str:
+        名字 = 图标.序号转名字(序号)
+        if 名字 == "未定义":
+            return "未定义"
+        else:
+            return 名字.split(":")[1].strip()
+
     def 转蓝图字符串(self) -> str:
         return str(self.序号)
 
@@ -92,6 +103,9 @@ class 图标(蓝图基类):
 
     def 转名字(self) -> str:
         return 图标.序号转名字(self.序号)
+
+    def 转真名(self) -> str:
+        return 图标.序号转真名(self.序号)
 
     def 转json(self) -> str:
         return 图标.序号转名字(self.序号)
