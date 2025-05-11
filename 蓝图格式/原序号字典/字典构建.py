@@ -27,7 +27,7 @@ def 文件头部注释与导入() -> str:
 # 这个文件由 原序号字典下的几个py构建而成
 # 自动生成时间：{__import__("datetime").datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 
-from typing import Dict, Any
+from typing import Dict
 """.strip()
 
 # 图标与序号 #
