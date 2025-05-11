@@ -1,8 +1,7 @@
 from typing import Union
 
 import 日志
-from 蓝图格式.序号字典.序号转模型 import 序号转模型
-from 蓝图格式.序号字典.模型转序号 import 模型转序号
+from 蓝图格式.序号字典.模型与序号 import 序号转模型, 模型转序号
 from 蓝图格式.序号字典.绰号转真名 import 绰号转真名
 from 蓝图格式.蓝图基础类型 import 蓝图基类
 
