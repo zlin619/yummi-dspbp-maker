@@ -18,9 +18,6 @@ class 区域(蓝图dataclass基类):
     ########################
     # 以上为字段，以下为函数 #
     ########################
-    def __hash__(self):
-        return hash(self.区域序号)
-
     def 转比特流(self) -> bytes:
         return struct.pack(
             "<bbhhhhhh",
