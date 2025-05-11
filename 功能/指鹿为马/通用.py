@@ -27,6 +27,7 @@ class 物品替换():
         return self._修改姿态
 
     def 为普通建筑(self, 物品ID: 图标):
+        日志.确保类型(物品ID, 图标)
         if self._建筑.物品序号.是传送带吗() or self._建筑.物品序号.是分拣器吗():
             self._修改姿态 = 布尔值.是
             self._建筑.空间姿态 = 普通建筑姿态(
@@ -39,6 +40,7 @@ class 物品替换():
         return self._修改姿态
 
     def 为传送带(self, 物品ID: 图标):
+        日志.确保类型(物品ID, 图标)
         if not self._建筑.物品序号.是传送带吗():
             self._修改姿态 = 布尔值.是
             self._姿态数组.append(0)
@@ -53,6 +55,7 @@ class 物品替换():
         return self._修改姿态
 
     def 为分拣器(self, 物品ID: 图标):
+        日志.确保类型(物品ID, 图标)
         if not self._建筑.物品序号.是分拣器吗():
             self._修改姿态 = 布尔值.是
             self._姿态数组.append(0)
@@ -71,6 +74,7 @@ class 物品替换():
         return self._修改姿态
 
     def 为(self, 物品ID: 图标):
+        日志.确保类型(物品ID, 图标)
         前物品ID = self._建筑.物品序号
         if 前物品ID == 物品ID:
             # 什么都不做
