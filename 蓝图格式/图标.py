@@ -1,8 +1,8 @@
 from typing import Union
 
 import 日志
-from 蓝图格式.序号字典.图标转序号 import 图标转序号
-from 蓝图格式.序号字典.序号转图标 import 序号转图标
+from 蓝图格式.序号字典.图标与序号 import 序号转图标
+from 蓝图格式.序号字典.图标与序号 import 建筑转序号, 纯物品转序号, 纯图标转序号, 高效配方转序号, 科技转序号, 图标转序号
 from 蓝图格式.序号字典.绰号转真名 import 绰号转真名
 from 蓝图格式.蓝图基础类型 import 蓝图基类
 
@@ -44,13 +44,38 @@ class 图标(蓝图基类):
     def 序号转名字(序号: int) -> str:
         if 序号 in 序号转图标:
             return 序号转图标[序号]
-        日志.警告(f"未知图标序号: {序号}")
-        return f"未知图标{序号}"
+        日志.警告(f"未知图标序号:{序号}")
+        return f"未知图标:{序号}"
+
+    @staticmethod
+    def 作用域加名字转序号(作用域: str, 名字: str) -> int:
+        作用域 = 作用域.strip()
+        名字 = 名字.strip()
+        if 作用域 == "建筑":
+            return 建筑转序号[名字]
+        elif 作用域 == "纯物品":
+            return 纯物品转序号[名字]
+        elif 作用域 == "纯图标":
+            return 纯图标转序号[名字]
+        elif 作用域 == "高效配方":
+            return 高效配方转序号[名字]
+        elif 作用域 == "科技":
+            return 科技转序号[名字]
+        elif 作用域 == "未知图标":
+            return int(名字[5:])
+        else:
+            raise ValueError(f"未知的图标作用域: {作用域}")
 
     @staticmethod
     def 名字转序号(名字: str) -> int:
-        if 名字.startswith("未知图标"):
-            return int(名字[4:])
+        if 名字 == "未定义":
+            return 0
+        elif ":" in 名字:
+            作用域, 名称 = 名字.split(":", 1)
+            return 图标.作用域加名字转序号(作用域, 名称)
+        elif "：" in 名字:
+            作用域, 名称 = 名字.split("：", 1)
+            return 图标.作用域加名字转序号(作用域, 名称)
 
         if 名字 in 绰号转真名:
             名字 = 绰号转真名[名字]
