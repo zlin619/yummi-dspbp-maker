@@ -21,6 +21,8 @@ class 物品替换():
         self._修改姿态 = 布尔值.否
 
     def 强行转换(self, 物品ID: 图标):
+        if not isinstance(物品ID, 图标):
+            raise TypeError("物品ID必须为class图标")
         self._建筑.物品序号 = 物品ID
         return self._修改姿态
 

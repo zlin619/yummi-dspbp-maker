@@ -72,6 +72,8 @@ class 建筑(蓝图dataclass基类):
     ########################
     # 以上为字段，以下为函数 #
     ########################
+    def __hash__(self):
+        return hash(self.建筑序号)
 
     @property
     def 堆叠接口(self):
