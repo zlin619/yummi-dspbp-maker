@@ -14,6 +14,18 @@ class 多接口分析(蓝图dataclass基类):
     def 添加分析(self, 输入接口: 单接口分析):
         self.接口数据.append(输入接口)
 
+    def 按建筑查找(self, l_建筑序号: int) -> 单接口分析:
+        for 接口 in self.接口数据:
+            if 接口.连接建筑.建筑序号 == l_建筑序号:
+                return 接口
+        return None
+
+    def 按自身接口查找(self, l_自身接口序号: int) -> 单接口分析:
+        for 接口 in self.接口数据:
+            if 接口.自身接口序号 == l_自身接口序号:
+                return 接口
+        return None
+
     def 合法校验():
         日志.未完成的函数()
 
