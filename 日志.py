@@ -23,7 +23,7 @@ def 纯虚函数():
     raise Exception(f"尝试执行纯虚函数")
 
 def 确保类型(输入, 类型: type):
-    if isinstance(输入, type):
+    if not isinstance(输入, 类型):
         raise Exception(f"输入类型错误:{输入.__class__}")
 
 def 日志(str):
