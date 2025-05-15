@@ -65,7 +65,7 @@ class 图标(蓝图基类):
         elif 作用域 == "科技":
             return 科技转序号[名字]
         elif 作用域 == "未知图标":
-            return int(名字[5:])
+            return int(名字)
         else:
             raise ValueError(f"未知的图标作用域: {作用域}")
 
