@@ -120,5 +120,8 @@ class 模型(蓝图基类):
         # 但这里先不算了
         return self.序号 in [49, 50]
 
+    def 是箱子吗(self):
+        return self.序号 in [51, 52]
+
     def 是四向吗(self):
         return self.序号 in [38, 39, 40]
