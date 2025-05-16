@@ -387,7 +387,6 @@ class 额外参数之物流塔(解析后额外参数):
         流数据.extend(struct.pack("<H" + "i" * 2048, 2048, *params))
         return 流数据
 
-# TODO: 当前未测试
 @dataclass
 class 额外参数之四向(解析后额外参数):
     接口0优先: 布尔值
