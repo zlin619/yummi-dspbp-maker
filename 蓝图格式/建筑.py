@@ -15,7 +15,7 @@ class 建筑类型分析(IntEnum):
     未分析 = auto()
     未知 = auto()
     无特殊性 = auto()
-    带拆除 = auto()
+    待拆除 = auto()
     仙术地基 = auto()
 
 @dataclass

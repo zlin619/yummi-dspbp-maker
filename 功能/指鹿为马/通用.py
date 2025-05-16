@@ -2,7 +2,7 @@ import copy
 import 日志
 from 蓝图格式.蓝图基础类型 import 布尔值
 from 蓝图格式.蓝图 import 图标
-from 蓝图格式.建筑 import 建筑
+from 蓝图格式.建筑 import 建筑, 建筑类型分析
 from 蓝图格式.坐标 import 普通建筑姿态
 from 蓝图格式.坐标 import 传送带姿态
 from 蓝图格式.坐标 import 分拣器姿态
@@ -13,6 +13,10 @@ from 蓝图格式.坐标 import 全空间姿态
 # 因为建筑的姿态(坐标和旋转)跟着itmID走
 # 而且这个字段不一样长
 class 物品替换():
+    _建筑: 建筑
+    _姿态数组: list[float]
+    _修改姿态: 布尔值
+
     def __init__(self, 输入数据: 建筑):
         if not isinstance(输入数据, 建筑):
             raise TypeError("只有建筑方可替换")
@@ -67,10 +71,12 @@ class 物品替换():
         self._建筑.物品序号 = 物品ID
         return self._修改姿态
 
-    def 拆(self, 物品ID: 图标):
-        self.为普通建筑(self, 图标("植物燃料"))
-        # TODO:
-        self._建筑.悠米_建筑标记 = "待拆除建筑"
+    # 标记拆除，不是真的拆
+    def 拆(self):
+        self.为普通建筑(图标("植物燃料"))
+        self._建筑.悠米_建筑类型 = 建筑类型分析.待拆除
+        self._建筑.输入接口.目标序号 = -1
+        self._建筑.输出接口.目标序号 = -1
         return self._修改姿态
 
     def 为(self, 物品ID: 图标):

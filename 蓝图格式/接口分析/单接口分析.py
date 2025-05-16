@@ -1,3 +1,4 @@
+import weakref
 from dataclasses import dataclass
 from enum import IntEnum, auto
 from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
