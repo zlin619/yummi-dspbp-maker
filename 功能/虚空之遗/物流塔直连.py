@@ -1,12 +1,9 @@
-from copy import deepcopy
 from 功能.指鹿为马.通用 import 物品替换
 from 功能.格式查找 import 蓝图内查找
 import 日志
 from 蓝图格式.图标 import 图标
-from 蓝图格式.序号字典 import 图标与序号
 from 蓝图格式.建筑 import 建筑, 建筑主导接口
-from 蓝图格式.蓝图 import 蓝图
-from 蓝图格式.额外参数 import 额外参数之传送带, 额外参数之空白
+from 蓝图格式.额外参数 import 额外参数之传送带
 
 
 class _连接塔预览:
@@ -44,8 +41,6 @@ class _物流塔连接管理器:
 
     def 查找连接并拆除传送带(self) -> None:
         for 当前建筑 in self.所有建筑:
-            if not 当前建筑.模型序号.是传送带吗():
-                continue
             if not isinstance(当前建筑.额外参数, 额外参数之传送带):
                 continue
             l_建筑序号: int = 当前建筑.建筑序号
@@ -61,8 +56,6 @@ class _物流塔连接管理器:
                 pass
 
     def 测算关系(self) -> None:
-        print(self.l_断开点转数字)
-        print(self.l_数字转连接塔)
         for 断开点_建筑序号, 图标数字 in self.l_断开点转数字.items():
             if 图标数字 in self.l_数字转连接塔:
                 连接塔: _连接塔预览 = self.l_数字转连接塔[图标数字]

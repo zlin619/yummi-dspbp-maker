@@ -130,5 +130,11 @@ class 图标(蓝图基类):
     def 是四向吗(self):
         return self.序号 == 2020
 
+    def 是物品吗(self):
+        return 1000 <= self.序号 < 10000
+
+    def 空吗(self):
+        return self.序号 == 0
+
 物品 = 图标
 科技 = 图标
