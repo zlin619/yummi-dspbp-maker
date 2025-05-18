@@ -68,11 +68,15 @@ https://github.com/zlin619/yummi-dspbp-maker
 
 ### alpha 1.0
 - 由于接口分析已经完成, 因此进入二周目
-- alpha 1中, 将实现无带工具
+- alpha 1中, 将实现无带工具虚空之遗
+
+### alpha 1.1
+- 实现点对点无带
+- 实现爪入塔无带
+
 
 ## 当前规划
 - 由于接口分析已经完成, 因此进入二周目
-- 无带工具
 
 ## 已知问题：
 - 缺少部分建筑的parameter解析方法.  
@@ -89,3 +93,4 @@ https://github.com/zlin619/yummi-dspbp-maker
 - 无带工具移植
 - 创世图标模型
 - 接口溯源
+- 配方ID

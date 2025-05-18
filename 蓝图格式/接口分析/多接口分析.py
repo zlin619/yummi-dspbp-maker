@@ -7,10 +7,12 @@ import 日志
 @dataclass
 class 多接口分析(蓝图dataclass基类):
     接口数据: list[单接口分析]
+    分拣器数量: int # 这个是分拣器数量, 不是接口数量
     _临时数据: list[单接口分析] # 用来存分拣器连接的
 
     def __init__(self):
         self.接口数据 = []
+        self.分拣器数量 = 0
         self._临时数据 = []
 
     def 添加分析(self, 输入接口: 单接口分析):
@@ -39,11 +41,14 @@ class 多接口分析(蓝图dataclass基类):
     def 合法校验():
         日志.未完成的函数()
 
-    def 排序():
-        日志.未完成的函数()
+    def 排序(self):
+        self.接口数据.sort(key=lambda x: x.自身接口序号)
 
-    def 分拣器数量() -> int:
-        日志.未完成的函数()
+    def 重算分拣器数量(self):
+        self.分拣器数量 = 0
+        for 接口 in self.接口数据:
+            if 接口.连接建筑.模型序号.是分拣器吗():
+                self.分拣器数量 += 1
     
     def 接口序号转建筑(): # 建筑
         from 蓝图格式.建筑 import 建筑
