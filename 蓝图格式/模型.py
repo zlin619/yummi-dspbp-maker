@@ -1,5 +1,6 @@
 from typing import Union
 
+import mod兼容
 import 日志
 from 蓝图格式.序号字典.模型与序号 import 序号转模型, 模型转序号
 from 蓝图格式.序号字典.绰号转真名 import 绰号转真名
@@ -39,24 +40,66 @@ class 模型(蓝图基类):
         return 模型.序号转名字(self.序号)
 
     @staticmethod
+    def 创世序号转名字(序号: int) -> str:
+        # 暂时不兼容多版本, 所以隔离
+        from 蓝图格式.序号字典.创世之书31_模型与序号 import 创世_序号转模型
+        if 序号 in 创世_序号转模型:
+            return f"创世之书:{创世_序号转模型[序号]}"
+        return None
+
+    @staticmethod
+    def 创世名字转序号(名字: str) -> int:
+        # 暂时不兼容多版本, 所以隔离
+        from 蓝图格式.序号字典.创世之书31_模型与序号 import 创世_模型转序号
+        if 名字 in 创世_模型转序号:
+            return 创世_模型转序号[名字]
+        return None
+
+    @staticmethod
     def 序号转名字(序号: int) -> str:
         if not isinstance(序号, int):
             raise ValueError(f"输入不为整数: {序号}")
         if 序号 in 序号转模型:
             return 序号转模型[序号]
+        if mod兼容.当前mod类型() == mod兼容.mod类型.创世之书31:
+            名字 = 模型.创世序号转名字(序号)
+            if 名字 is not None:
+                return 名字
         日志.警告(f"未知模型序号: {序号}")
-        return f"未知模型{序号}"
+        return f"未知模型:{序号}"
+
+    @staticmethod
+    def 作用域加名字转序号(作用域: str, 名字: str) -> int:
+        作用域 = 作用域.strip()
+        名字 = 名字.strip()
+        if 作用域 == "未知模型":
+            return int(名字)
+        elif 作用域 == "创世之书":
+            return 模型.创世名字转序号(名字)
+        else:
+            raise ValueError(f"未知的模型作用域: {作用域}")
 
     @staticmethod
     def 名字转序号(名字: str) -> int:
-        if 名字.startswith("未知模型"):
-            return int(名字[4:])
-
+        名字 = 名字.strip()
+        if 名字 == "未定义":
+            return 0
+        elif 名字.isdigit():
+            return int(名字) 
+        elif ":" in 名字:
+            作用域, 名称 = 名字.split(":", 1)
+            return 模型.作用域加名字转序号(作用域, 名称)
+        elif "：" in 名字:
+            作用域, 名称 = 名字.split("：", 1)
+            return 模型.作用域加名字转序号(作用域, 名称)
         if 名字 in 绰号转真名:
             名字 = 绰号转真名[名字]
-
         if 名字 in 模型转序号:
             return 模型转序号[名字]
+        if mod兼容.当前mod类型() == mod兼容.mod类型.创世之书31:
+            序号 = 模型.创世名字转序号(名字)
+            if 序号 is not None:
+                return 序号
         raise ValueError(f"未知的模型名字: {名字}")
 
     def 转蓝图字符串(self) -> str:

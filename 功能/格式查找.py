@@ -46,6 +46,11 @@ class 蓝图内查找:
             self.l_所有建筑 = self.本蓝图中段().建筑
         return self.l_所有建筑
 
+    def 所有分拣器(self):
+        if not hasattr(self, 'l_所有分拣器'):
+            self.l_所有分拣器 = [建筑 for 建筑 in self.所有建筑() if 建筑.模型序号.是分拣器吗()]
+        return self.l_所有分拣器
+
     def 缩略图(self):
         if not hasattr(self, 'l_缩略图'):
             self.l_缩略图 = self.本蓝图头部().缩略图
