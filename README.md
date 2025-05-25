@@ -73,7 +73,7 @@ https://github.com/zlin619/yummi-dspbp-maker
 ### alpha 1.1
 - 实现点对点无带
 - 实现爪入塔无带
-
+- 实现混合输入无带
 
 ## 当前规划
 - 由于接口分析已经完成, 因此进入二周目

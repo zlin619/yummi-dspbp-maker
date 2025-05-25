@@ -1,12 +1,21 @@
+import os
+import sys
+from 功能 import 格式查找
 from 功能.虚空之遗.虚空之遗全流程 import 虚空之遗
 from 文件.文件读写 import 保存蓝图, 工程目录, 读取泛蓝图文件, 建筑蓝图目录, 保存所有建筑
 from 功能.舍弃精度 import 批量舍弃精度
 from 功能.指鹿为马.改天换地 import 改天换地
 from 功能.指鹿为马.通用 import 强制纠正姿态
 from 功能.接口简单分析 import 分析辅助, 尝试接口分析
+from 蓝图格式.坐标 import 普通建筑姿态
+from 蓝图格式.建筑 import 建筑
+
+import mod兼容
+
+
 
 print("脚本运行开始")
-
+mod兼容.设置mod类型(mod兼容.mod类型.创世之书31)
 本蓝图 = 读取泛蓝图文件(Rf"{工程目录()}\蓝图库\临时\输入蓝图.txt")
 批量舍弃精度(本蓝图).旋转().坐标()
 

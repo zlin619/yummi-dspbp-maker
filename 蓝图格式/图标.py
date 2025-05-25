@@ -5,6 +5,9 @@ from 蓝图格式.序号字典.图标与序号 import 序号转图标
 from 蓝图格式.序号字典.图标与序号 import 建筑转序号, 纯物品转序号, 纯图标转序号, 高效配方转序号, 科技转序号, 图标转序号
 from 蓝图格式.序号字典.绰号转真名 import 绰号转真名
 from 蓝图格式.蓝图基础类型 import 蓝图基类
+import mod兼容
+# mod
+
 
 # from 蓝图格式.图标 import 图标
 class 图标(蓝图基类):
@@ -44,9 +47,29 @@ class 图标(蓝图基类):
         return 图标.序号转名字(self.序号)
 
     @staticmethod
+    def 创世序号转名字(序号: int) -> str:
+        # 暂时不兼容多版本, 所以隔离
+        from 蓝图格式.序号字典.创世之书31_图标与序号 import 创世_序号转图标
+        if 序号 in 创世_序号转图标:
+            return 创世_序号转图标[序号]
+        return None
+
+    @staticmethod
+    def 创世名字转序号(名字: str) -> int:
+        # 暂时不兼容多版本, 所以隔离
+        from 蓝图格式.序号字典.创世之书31_图标与序号 import 创世_图标转序号
+        if 名字 in 创世_图标转序号:
+            return 创世_图标转序号[名字]
+        return None
+
+    @staticmethod
     def 序号转名字(序号: int) -> str:
         if 序号 in 序号转图标:
             return 序号转图标[序号]
+        if mod兼容.当前mod类型() == mod兼容.mod类型.创世之书31:
+            名字 = 图标.创世序号转名字(序号)
+            if 名字 is not None:
+                return f"创世之书:{名字}"
         日志.警告(f"未知图标序号:{序号}")
         return f"未知图标:{序号}"
 
@@ -64,15 +87,22 @@ class 图标(蓝图基类):
             return 高效配方转序号[名字]
         elif 作用域 == "科技":
             return 科技转序号[名字]
+        elif 作用域 == "创世之书":
+            序号 = 图标.创世名字转序号(名字)
+            if 序号 is not None:
+                return 序号
+            raise ValueError(f"创世之书没有图标: {名字}")
         elif 作用域 == "未知图标":
             return int(名字)
-        else:
-            raise ValueError(f"未知的图标作用域: {作用域}")
+        raise ValueError(f"未知的图标作用域: {作用域}")
 
     @staticmethod
     def 名字转序号(名字: str) -> int:
+        名字 = 名字.strip()
         if 名字 == "未定义":
             return 0
+        elif 名字.isdigit():
+            return int(名字) 
         elif ":" in 名字:
             作用域, 名称 = 名字.split(":", 1)
             return 图标.作用域加名字转序号(作用域, 名称)
@@ -85,6 +115,11 @@ class 图标(蓝图基类):
 
         if 名字 in 图标转序号:
             return 图标转序号[名字]
+        
+        if mod兼容.当前mod类型() == mod兼容.mod类型.创世之书31:
+            序号 = 图标.创世名字转序号(名字)
+            if 序号 is not None:
+                return 序号
         raise ValueError(f"未知的图标名字: {名字}")
 
     @staticmethod
