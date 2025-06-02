@@ -7,8 +7,7 @@ import 蓝图格式.类型 as 类型
 from 蓝图格式.图标 import 图标
 from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 
-# 塔
-class 运输模式(IntEnum):
+class 塔运输模式(IntEnum):
     存储 = 0
     供应 = 1
     需求 = 2
@@ -35,14 +34,14 @@ class 集装层数(IntEnum):
 @dataclass
 class 物流塔格子(蓝图dataclass基类):
     物品ID: 图标
-    本地运输模式: 运输模式
-    星际运输模式: 运输模式
+    本地运输模式: 塔运输模式
+    星际运输模式: 塔运输模式
     存储上限: 类型.Int32
     锁定模式: 沙盒锁定模式
 
     @classmethod
     def 由数组构造(cls, p):
-        return cls(图标(p[0]), 运输模式(p[1]), 运输模式(p[2]), p[3], 沙盒锁定模式(p[4]))
+        return cls(图标(p[0]), 塔运输模式(p[1]), 塔运输模式(p[2]), p[3], 沙盒锁定模式(p[4]))
 
     def 转二进制数组(self):
         return [
