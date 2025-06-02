@@ -17,6 +17,8 @@ class 建筑类型分析(IntEnum):
     无特殊性 = auto()
     待拆除 = auto()
     仙术地基 = auto()
+    浮空建筑 = auto()
+    堆叠建筑 = auto()
 
 @dataclass
 class 建筑主导接口(蓝图dataclass基类):
@@ -76,22 +78,22 @@ class 建筑(蓝图dataclass基类):
         return hash(self.建筑序号)
 
     @property
-    def 堆叠接口(self):
+    def 堆叠接口(self) -> 建筑主导接口:
         return self.输入接口
 
     def 检查姿态(self):
-        def 姿态告警():
-            日志.告警(f"物品类型{self.物品序号}和空间姿态{self.空间姿态.__class__}不匹配。这可能导致蓝图无法读取。")
-            日志.告警(f"建议:from 功能.指鹿为马.通用 import 强制纠正姿态; 强制纠正姿态(蓝图)")
+        def 姿态警告():
+            日志.警告(f"物品类型{self.物品序号}和空间姿态{self.空间姿态.__class__}不匹配。这可能导致蓝图无法读取。")
+            日志.警告(f"建议:from 功能.指鹿为马.通用 import 强制纠正姿态; 强制纠正姿态(蓝图)")
         if self.物品序号.是传送带吗():
             if not isinstance(self.空间姿态, 坐标格式.传送带姿态):
-                姿态告警()
+                姿态警告()
         elif self.物品序号.是分拣器吗():
             if not isinstance(self.空间姿态, 坐标格式.分拣器姿态):
-                姿态告警()
+                姿态警告()
         else:
             if not isinstance(self.空间姿态, 坐标格式.普通建筑姿态):
-                姿态告警()
+                姿态警告()
 
     def 转比特流(self) -> bytes:
         self.检查姿态()
@@ -129,12 +131,12 @@ class 建筑(蓝图dataclass基类):
 
     def 转json(self):
         返回值 = self.原始函数_转json()
-        if self.物品序号.是传送带吗() or self.物品序号.是分拣器吗():
+        if self.模型序号.是传送带吗() or self.模型序号.是分拣器吗():
             return 返回值
         # 创建新字典，按原始顺序重建键
         新返回值 = {}
         for 键值 in 返回值.keys():
-            if 键值 == '输出接口':
+            if 键值 == '输入接口':
                 新返回值['堆叠接口'] = 返回值[键值]
             else:
                 新返回值[键值] = 返回值[键值]
@@ -147,7 +149,7 @@ class 建筑(蓝图dataclass基类):
         新数据字典 = {}
         for 键值 in 数据字典.keys():
             if 键值 == '堆叠接口':
-                新数据字典['输出接口'] = 数据字典[键值]
+                新数据字典['输入接口'] = 数据字典[键值]
             else:
                 新数据字典[键值] = 数据字典[键值]
         return cls.原始函数_由json转换(新数据字典)

@@ -79,7 +79,9 @@ class 物品替换():
         self._建筑.输出接口.目标序号 = -1
         return self._修改姿态
 
-    def 为(self, 物品ID: 图标):
+    def 为(self, 物品ID: 图标|str):
+        if isinstance(物品ID, str):
+            物品ID = 图标(物品ID)
         日志.确保类型(物品ID, 图标)
         前物品ID = self._建筑.物品序号
         if 前物品ID == 物品ID:
