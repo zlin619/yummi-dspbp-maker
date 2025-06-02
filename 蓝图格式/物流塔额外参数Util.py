@@ -21,8 +21,9 @@ class 沙盒锁定模式(IntEnum):
 
 class 带进出塔(IntEnum):
     不设置 = 0
-    进塔 = 1
-    出塔 = 2
+    出塔 = 1
+    进塔 = 2
+
 
 class 集装层数(IntEnum):
     最大 = 0
