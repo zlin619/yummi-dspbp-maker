@@ -4,6 +4,8 @@ import 日志
 from 蓝图格式.坐标 import 传送带姿态
 from 蓝图格式.建筑 import 建筑
 
+日志.警告("你正在使用一个仍然在测试中的py文件")
+
 def 垂直叠加(
     建筑列表: List[建筑],
     叠加次数: int,

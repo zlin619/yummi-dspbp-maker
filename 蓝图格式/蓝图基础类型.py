@@ -19,7 +19,10 @@ class _字典转换器:
             元素类型 = get_args(字段类型)[0]
             return [_字典转换器.转换字段值(元素类型, x) for x in 字段值]
         elif issubclass(字段类型, Enum):
-            return 字段类型[字段值]
+            if isinstance(字段值, int):
+                return 字段类型(字段值)
+            else:
+                return 字段类型[字段值]
         elif issubclass(字段类型, 蓝图基类):
             return 字段类型.由json转换(字段值)
         else:
