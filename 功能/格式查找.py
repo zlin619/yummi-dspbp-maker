@@ -1,5 +1,6 @@
 
 from 蓝图格式.中段 import 蓝图中段
+from 蓝图格式.蓝图 import 蓝图头部
 from 蓝图格式.蓝图 import 蓝图
 from 蓝图格式.建筑 import 建筑
 from 蓝图格式.区域 import 区域
@@ -9,6 +10,8 @@ class 蓝图内查找:
     def __init__(self, 输入数据):
         if isinstance(输入数据, 蓝图):
             self.l_本蓝图 = 输入数据
+        elif isinstance(输入数据, 蓝图头部):
+            self.l_本蓝图头部 = 输入数据
         elif isinstance(输入数据, 蓝图中段):
             self.l_本蓝图中段 = 输入数据
         elif isinstance(输入数据, list):
@@ -56,3 +59,7 @@ class 蓝图内查找:
             self.l_缩略图 = self.本蓝图头部().缩略图
         return self.l_缩略图
 
+    def 游戏版本(self):
+        if not hasattr(self, 'l_游戏版本'):
+            self.l_游戏版本 = self.本蓝图头部().游戏版本
+        return self.l_游戏版本
