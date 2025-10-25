@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
+import os
+import sys
+
 from 文件.文件读写 import 读取txt文件, 读取json文件
 from 蓝图格式.坐标 import 空间坐标
 from 蓝图格式.蓝图 import 蓝图
@@ -13,11 +16,20 @@ class 蓝图工具UI:
         
         # 设置窗口图标
         try:
-            # 将图标文件放在项目目录下，并更新路径
-            self.root.iconbitmap("门扉秘典.ico")  # 使用.ico格式的图标文件
-        except tk.TclError:
-            print("图标加载失败，使用默认图标")
-            pass
+            # 如果是直接运行Python脚本
+            application_path = os.path.dirname(os.path.abspath(__file__))
+            icon_path = os.path.join(application_path, "门扉秘典.ico")
+            
+            # 确保图标文件存在再设置
+            if os.path.exists(icon_path):
+                self.root.iconbitmap(icon_path)
+                print(f"成功加载图标: {icon_path}")
+            else:
+                print(f"图标文件不存在: {icon_path}")
+        except tk.TclError as e:
+            print(f"图标加载失败，使用默认图标: {e}")
+        except Exception as e:
+            print(f"图标加载出错: {e}")
 
         # 配置 grid 布局，确保窗口分为 3 列 2 行
         for i in range(3):  # 配置 3 列
