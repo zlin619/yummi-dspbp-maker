@@ -145,7 +145,8 @@ class 比特流解析器:
         所有建筑 = []
         for i in range(建筑数):
             num, = self.解析("i")
-            assert num == -101
+            # 提供更详细的断言错误信息
+            assert num == -101, f"解析建筑时出现错误的标识符，期望值: -101, 实际值: {num}, 建筑索引: {i}, 总建筑数: {建筑数}"
             (
                 index,
                 itemId,
