@@ -132,8 +132,8 @@ class 蓝图工具UI:
         text_button_frame = tk.Frame(self.text_tab, bg="lightyellow")
         text_button_frame.grid(row=0, column=1, padx=20, pady=5, sticky="n")  # 居中显示，左右留白
         
-        # 从剪贴板复制按钮
-        clipboard_button = tk.Button(text_button_frame, text="从剪贴板复制", command=self._从剪贴板复制)
+        # 从剪贴板粘贴按钮
+        clipboard_button = tk.Button(text_button_frame, text="从剪贴板粘贴", command=self._从剪贴板粘贴)
         clipboard_button.pack(side=tk.LEFT, padx=5)
 
         # 大文本输入框 - 放在下方
@@ -147,7 +147,7 @@ class 蓝图工具UI:
         self.text_tab.columnconfigure(0, weight=1)
         self.text_tab.columnconfigure(1, weight=1)
 
-    def _从剪贴板复制(self):
+    def _从剪贴板粘贴(self):
         try:
             clipboard_content = self.root.clipboard_get()
             self.text_entry.delete(1.0, tk.END)
@@ -179,6 +179,11 @@ class 蓝图工具UI:
         self.删锚点_tab = tk.Frame(self.转换_notebook, bg="lightyellow")
         self.转换_notebook.add(self.删锚点_tab, text="删锚点")
         self._初始化删锚点选项卡()
+
+        # 浮空仙术选项卡
+        self.浮空仙术_tab = tk.Frame(self.转换_notebook, bg="lightyellow")
+        self.转换_notebook.add(self.浮空仙术_tab, text="浮空仙术")
+        self._初始化浮空仙术选项卡()
 
     def _初始化基础选项卡(self):
         # 添加转换按钮
@@ -245,6 +250,10 @@ class 蓝图工具UI:
 
     def _初始化删锚点选项卡(self):
         convert_button = tk.Button(self.删锚点_tab, text="转换", command=self._执行删锚点转换)
+        convert_button.pack(pady=10)
+        
+    def _初始化浮空仙术选项卡(self):
+        convert_button = tk.Button(self.浮空仙术_tab, text="转换", command=self._执行浮空仙术转换)
         convert_button.pack(pady=10)
     def _从文本读取(self) -> 蓝图:
         输入文本 = self.text_entry.get(1.0, tk.END).strip()
@@ -334,12 +343,20 @@ class 蓝图工具UI:
         本蓝图 = self._读取蓝图()
         转换为单锚点(本蓝图)
         self._显示蓝图输出(本蓝图)
-    def _显示蓝图输出(self, 蓝图对象):
+
+    def _执行浮空仙术转换(self):
+        # TODO: 这里需要实现浮空仙术的具体功能
+        本蓝图 = self._读取蓝图()
+        # 等待添加浮空仙术功能实现
+        self._显示蓝图输出(本蓝图)
+
+    def _显示蓝图输出(self, 蓝图对象: 蓝图):
         self._清理文本框残留数据()
         if not 蓝图对象: return
         try:
-            json_str = str(蓝图对象.转json())
-            self.json文本框.insert(tk.END, json_str)
+            json_str = 蓝图对象.转json()
+            import json
+            self.json文本框.insert(tk.END, json.dumps(json_str, ensure_ascii=False, indent=4))
         except Exception as e:
             messagebox.showerror("Json输出错误", str(e))
             pass
