@@ -255,6 +255,7 @@ class 蓝图工具UI:
     def _初始化浮空仙术选项卡(self):
         convert_button = tk.Button(self.浮空仙术_tab, text="转换", command=self._执行浮空仙术转换)
         convert_button.pack(pady=10)
+
     def _从文本读取(self) -> 蓝图:
         输入文本 = self.text_entry.get(1.0, tk.END).strip()
         if not 输入文本:
@@ -345,9 +346,9 @@ class 蓝图工具UI:
         self._显示蓝图输出(本蓝图)
 
     def _执行浮空仙术转换(self):
-        # TODO: 这里需要实现浮空仙术的具体功能
         本蓝图 = self._读取蓝图()
-        # 等待添加浮空仙术功能实现
+        from 功能.浮空地基 import 添加仙术地基
+        添加仙术地基(本蓝图)
         self._显示蓝图输出(本蓝图)
 
     def _显示蓝图输出(self, 蓝图对象: 蓝图):
