@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
+import os
+import sys
+
 from 文件.文件读写 import 读取txt文件, 读取json文件
 from 蓝图格式.坐标 import 空间坐标
 from 蓝图格式.蓝图 import 蓝图
@@ -13,11 +16,20 @@ class 蓝图工具UI:
         
         # 设置窗口图标
         try:
-            # 将图标文件放在项目目录下，并更新路径
-            self.root.iconbitmap("门扉秘典.ico")  # 使用.ico格式的图标文件
-        except tk.TclError:
-            print("图标加载失败，使用默认图标")
-            pass
+            # 如果是直接运行Python脚本
+            application_path = os.path.dirname(os.path.abspath(__file__))
+            icon_path = os.path.join(application_path, "门扉秘典.ico")
+            
+            # 确保图标文件存在再设置
+            if os.path.exists(icon_path):
+                self.root.iconbitmap(icon_path)
+                print(f"成功加载图标: {icon_path}")
+            else:
+                print(f"图标文件不存在: {icon_path}")
+        except tk.TclError as e:
+            print(f"图标加载失败，使用默认图标: {e}")
+        except Exception as e:
+            print(f"图标加载出错: {e}")
 
         # 配置 grid 布局，确保窗口分为 3 列 2 行
         for i in range(3):  # 配置 3 列
@@ -120,8 +132,8 @@ class 蓝图工具UI:
         text_button_frame = tk.Frame(self.text_tab, bg="lightyellow")
         text_button_frame.grid(row=0, column=1, padx=20, pady=5, sticky="n")  # 居中显示，左右留白
         
-        # 从剪贴板复制按钮
-        clipboard_button = tk.Button(text_button_frame, text="从剪贴板复制", command=self._从剪贴板复制)
+        # 从剪贴板粘贴按钮
+        clipboard_button = tk.Button(text_button_frame, text="从剪贴板粘贴", command=self._从剪贴板粘贴)
         clipboard_button.pack(side=tk.LEFT, padx=5)
 
         # 大文本输入框 - 放在下方
@@ -135,7 +147,7 @@ class 蓝图工具UI:
         self.text_tab.columnconfigure(0, weight=1)
         self.text_tab.columnconfigure(1, weight=1)
 
-    def _从剪贴板复制(self):
+    def _从剪贴板粘贴(self):
         try:
             clipboard_content = self.root.clipboard_get()
             self.text_entry.delete(1.0, tk.END)
@@ -167,6 +179,11 @@ class 蓝图工具UI:
         self.删锚点_tab = tk.Frame(self.转换_notebook, bg="lightyellow")
         self.转换_notebook.add(self.删锚点_tab, text="删锚点")
         self._初始化删锚点选项卡()
+
+        # 浮空仙术选项卡
+        self.浮空仙术_tab = tk.Frame(self.转换_notebook, bg="lightyellow")
+        self.转换_notebook.add(self.浮空仙术_tab, text="浮空仙术")
+        self._初始化浮空仙术选项卡()
 
     def _初始化基础选项卡(self):
         # 添加转换按钮
@@ -234,6 +251,11 @@ class 蓝图工具UI:
     def _初始化删锚点选项卡(self):
         convert_button = tk.Button(self.删锚点_tab, text="转换", command=self._执行删锚点转换)
         convert_button.pack(pady=10)
+        
+    def _初始化浮空仙术选项卡(self):
+        convert_button = tk.Button(self.浮空仙术_tab, text="转换", command=self._执行浮空仙术转换)
+        convert_button.pack(pady=10)
+
     def _从文本读取(self) -> 蓝图:
         输入文本 = self.text_entry.get(1.0, tk.END).strip()
         if not 输入文本:
@@ -322,12 +344,20 @@ class 蓝图工具UI:
         本蓝图 = self._读取蓝图()
         转换为单锚点(本蓝图)
         self._显示蓝图输出(本蓝图)
-    def _显示蓝图输出(self, 蓝图对象):
+
+    def _执行浮空仙术转换(self):
+        本蓝图 = self._读取蓝图()
+        from 功能.浮空地基 import 添加仙术地基
+        添加仙术地基(本蓝图)
+        self._显示蓝图输出(本蓝图)
+
+    def _显示蓝图输出(self, 蓝图对象: 蓝图):
         self._清理文本框残留数据()
         if not 蓝图对象: return
         try:
-            json_str = str(蓝图对象.转json())
-            self.json文本框.insert(tk.END, json_str)
+            json_str = 蓝图对象.转json()
+            import json
+            self.json文本框.insert(tk.END, json.dumps(json_str, ensure_ascii=False, indent=4))
         except Exception as e:
             messagebox.showerror("Json输出错误", str(e))
             pass
