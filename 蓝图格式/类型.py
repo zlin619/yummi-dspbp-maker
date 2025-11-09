@@ -8,3 +8,4 @@ Int32 = Annotated[int, pydantic.Field(ge=-2147483648, le=2147483647)]  # i
 
 UInt8 = Annotated[int, pydantic.Field(ge=0, le=255)]  # B
 UInt16 = Annotated[int, pydantic.Field(ge=0, le=65535)]  # H
+UInt32 = Annotated[int, pydantic.Field(ge = 0, le = 4294967295)] # I

@@ -10,6 +10,7 @@ from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 class 中段杂项(蓝图dataclass基类):
     # 一般为1
     版本: 类型.Int32
+    补丁: 类型.Int32
     光标锚点偏移坐标: Int32平面坐标
     # 一般为0
     光标对应区域: 类型.Int32

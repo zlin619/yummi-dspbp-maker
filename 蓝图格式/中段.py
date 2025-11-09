@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from 蓝图格式.中段杂项 import 中段杂项
 from 蓝图格式.区域 import 区域
 from 蓝图格式.建筑 import 建筑
+from 蓝图格式.地基 import 地基
 from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 
 
@@ -20,6 +21,7 @@ class 蓝图中段(蓝图dataclass基类):
     杂项: 中段杂项
     区域: list[区域]
     建筑: list[建筑]
+    地基: 地基
 
     ########################
     # 以上为字段，以下为函数 #
@@ -33,6 +35,13 @@ class 蓝图中段(蓝图dataclass基类):
         流数据.extend(struct.pack("i", len(self.建筑)))
         for 单个建筑 in self.建筑:
             流数据.extend(单个建筑.转比特流())
+        if self.杂项.版本 >= 2:
+            流数据.extend(struct.pack("i", self.杂项.补丁))
+            if len(self.地基.矩形区域) > 0:
+                流数据.extend(struct.pack("b", 1))
+                流数据.extend(self.地基.转比特流())
+            else:
+                流数据.extend(struct.pack("b", 0))
         return bytes(流数据)
 
     def 转蓝图字符串(self) -> str:
