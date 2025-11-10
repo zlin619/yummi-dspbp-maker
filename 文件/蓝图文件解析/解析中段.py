@@ -6,6 +6,8 @@ from 蓝图格式.中段 import 蓝图中段
 from 蓝图格式.中段杂项 import 中段杂项
 from 蓝图格式.区域 import 区域
 from 蓝图格式.图标 import 图标
+from 蓝图格式.地基 import 地基
+from 蓝图格式.地基矩形区域 import 地基矩形区域
 from 蓝图格式.坐标 import Int32平面坐标, Int16平面坐标, 普通建筑姿态, 传送带姿态, 全空间姿态, 分拣器姿态
 from 蓝图格式.建筑 import 建筑, 建筑主导接口, 建筑类型分析
 from 蓝图格式.接口分析.多接口分析 import 多接口分析
@@ -47,6 +49,7 @@ class 比特流解析器:
         )
         return 中段杂项(
             版本=类型.Int32(version),
+            补丁=类型.Int32(version),
             光标锚点偏移坐标=l_光标锚点偏移坐标,
             光标对应区域=类型.Int32(cursorTargetArea),
             拖拽框大小=l_拖拽框大小,
@@ -217,7 +220,38 @@ class 比特流解析器:
             )
             所有建筑.append(当前建筑)
         return 所有建筑
-
+    
+    def 解析地基(self) -> 地基:
+        (v,) = self.解析("B")
+        (rectCount,) = self.解析("i")
+        矩形区域 = []
+        for i in range(rectCount):
+            矩形区域.append(self.解析地基矩形())
+        (colorMask, colorCount) = self.解析("Ii")
+        调色盘 = []
+        for i in range(类型.Int32(colorCount)):
+            调色盘.append(类型.UInt32(self.解析("I")))
+        地基数据 = 地基(
+            类型.UInt8(v),
+            矩形区域,
+            类型.UInt32(colorMask),
+            调色盘,
+        )
+        return 地基数据
+        
+    def 解析地基矩形(self) -> 地基矩形区域:
+        (v,) = self.解析("B")
+        (x, y, w, h, data, areaIndex) = self.解析("hh4B")
+        矩形区域 = 地基矩形区域(
+            类型.UInt8(v),
+            类型.Int16(x),
+            类型.Int16(y),
+            类型.UInt8(w),
+            类型.UInt8(h),
+            类型.UInt8(data),
+            类型.UInt8(areaIndex)
+        )
+        return 矩形区域
 
 def Base64解析(Base64字符) -> str:
     解码 = base64.b64decode(Base64字符)
@@ -232,10 +266,23 @@ def 解析中段(中段字符) -> 蓝图中段:
     l_杂项 = 流解析器.解析杂项()
     l_区域 = 流解析器.解析区域()
     l_建筑 = 流解析器.解析建筑()
+    l_地基 = 地基(
+        0,
+        [],
+        0x00000000,
+        [类型.UInt32(0) for i in range(16)]
+    )
+    if l_杂项.版本 >= 2:
+        (p,) = 流解析器.解析("i")
+        (hasReform,) = 流解析器.解析("B")
+        if hasReform > 0:
+            l_地基 = 流解析器.解析地基()
+            l_杂项.补丁号 = 类型.Int32(p)
     return 蓝图中段(
         杂项=l_杂项,
         区域=l_区域,
-        建筑=l_建筑
+        建筑=l_建筑,
+        地基=l_地基
     )
 
 
