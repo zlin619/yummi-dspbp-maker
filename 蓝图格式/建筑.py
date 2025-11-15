@@ -6,6 +6,7 @@ import 日志
 from 蓝图格式.蓝图基础类型 import 蓝图dataclass基类
 from 蓝图格式.图标 import 图标
 from 蓝图格式.模型 import 模型
+from 蓝图格式.配方 import 配方
 from 蓝图格式.额外参数 import 额外参数
 from 蓝图格式.接口分析.多接口分析 import 多接口分析
 import 蓝图格式.坐标 as 坐标格式
@@ -61,7 +62,7 @@ class 建筑(蓝图dataclass基类):
     输出接口: 建筑主导接口
     输入接口: 建筑主导接口
 
-    配方序号: 类型.UInt16  # 常见于制造厂类建筑
+    配方序号: 配方  # 常见于制造厂类建筑
     过滤物品序号: 图标  # UInt16,常见于分拣器、四向
     额外参数: 额外参数
 
@@ -141,7 +142,6 @@ class 建筑(蓝图dataclass基类):
             else:
                 新返回值[键值] = 返回值[键值]
         return 新返回值
-
     @classmethod
     def 由json转换(cls, 数据字典: dict):
         if '堆叠接口' not in 数据字典:

@@ -12,6 +12,7 @@ from 蓝图格式.坐标 import Int32平面坐标, Int16平面坐标, 普通建�
 from 蓝图格式.建筑 import 建筑, 建筑主导接口, 建筑类型分析
 from 蓝图格式.接口分析.多接口分析 import 多接口分析
 from 蓝图格式.模型 import 模型
+from 蓝图格式.配方 import 配方
 from 蓝图格式.额外参数 import 额外参数之未解析
 
 
@@ -161,6 +162,7 @@ class 比特流解析器:
             l_区域序号=类型.Int8(areaIndex)
             l_物品序号=图标(itemId)
             l_模型序号=模型(modelIndex)
+            l_配方序号=配方(recipeId)
 
             if l_物品序号.是传送带吗():
                 姿态 = self.解析传送带姿态()
@@ -211,7 +213,7 @@ class 比特流解析器:
                 空间姿态=姿态,
                 输出接口=输出接口,
                 输入接口=输入接口,
-                配方序号=类型.UInt16(recipeId),
+                配方序号=l_配方序号,
                 过滤物品序号=图标(filterId),
                 额外参数=l_额外参数,
 
