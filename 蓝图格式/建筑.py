@@ -121,7 +121,7 @@ class 建筑(蓝图dataclass基类):
                 self.输入接口.自身接口,
                 self.输出接口.插槽偏移,
                 self.输入接口.插槽偏移,
-                self.配方序号,
+                self.配方序号.转int(),
                 self.过滤物品序号.转int(),
             )
         )

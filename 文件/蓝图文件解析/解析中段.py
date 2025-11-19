@@ -162,7 +162,6 @@ class 比特流解析器:
             l_区域序号=类型.Int8(areaIndex)
             l_物品序号=图标(itemId)
             l_模型序号=模型(modelIndex)
-            l_配方序号=配方(recipeId)
 
             if l_物品序号.是传送带吗():
                 姿态 = self.解析传送带姿态()
@@ -204,6 +203,7 @@ class 比特流解析器:
                 自身接口=类型.Int8(inputToSlot),
                 插槽偏移=类型.Int8(inputOffset)
             )
+            l_配方序号=配方(recipeId)
 
             当前建筑 = 建筑(
                 建筑序号=l_建筑序号,
