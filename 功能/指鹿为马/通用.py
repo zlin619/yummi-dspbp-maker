@@ -32,7 +32,7 @@ class 物品替换():
 
     def 为普通建筑(self, 物品ID: 图标):
         日志.确保类型(物品ID, 图标)
-        if self._建筑.物品序号.是传送带吗() or self._建筑.物品序号.是分拣器吗():
+        if not isinstance(self._建筑.空间姿态, 普通建筑姿态):
             self._修改姿态 = 布尔值.是
             self._建筑.空间姿态 = 普通建筑姿态(
                 东西X=self._姿态数组[0],
@@ -45,7 +45,7 @@ class 物品替换():
 
     def 为传送带(self, 物品ID: 图标):
         日志.确保类型(物品ID, 图标)
-        if not self._建筑.物品序号.是传送带吗():
+        if not isinstance(self._建筑.空间姿态, 传送带姿态):
             self._修改姿态 = 布尔值.是
             self._姿态数组.append(0)
             self._建筑.空间姿态 = 传送带姿态(
@@ -60,7 +60,7 @@ class 物品替换():
 
     def 为分拣器(self, 物品ID: 图标):
         日志.确保类型(物品ID, 图标)
-        if not self._建筑.物品序号.是分拣器吗():
+        if not isinstance(self._建筑.空间姿态, 分拣器姿态):
             self._修改姿态 = 布尔值.是
             self._姿态数组.append(0)
             self._姿态数组.append(0)
@@ -83,19 +83,14 @@ class 物品替换():
         if isinstance(物品ID, str):
             物品ID = 图标(物品ID)
         日志.确保类型(物品ID, 图标)
-        前物品ID = self._建筑.物品序号
-        if 前物品ID == 物品ID:
-            # 什么都不做
-            return self._修改姿态
         if self._建筑.模型序号.是分拣器吗() and not 物品ID.是分拣器吗():
             日志.警告("分拣器的物品替换为非分拣器时, 可能会出现长度或者其他问题")
         if 物品ID.是传送带吗():
-            self.为传送带(物品ID)
+            return self.为传送带(物品ID)
         elif 物品ID.是分拣器吗():
-            self.为分拣器(物品ID)
+            return self.为分拣器(物品ID)
         else:
-            self.为普通建筑(物品ID)
-        return self._修改姿态
+            return self.为普通建筑(物品ID)
 
 # from 功能.指鹿为马.通用 import 强制纠正姿态
 def 强制纠正姿态(输入参数):

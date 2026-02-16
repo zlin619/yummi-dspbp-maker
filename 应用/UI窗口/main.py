@@ -253,6 +253,15 @@ class 蓝图工具UI:
         convert_button.pack(pady=10)
         
     def _初始化浮空仙术选项卡(self):
+        # 添加警告标签
+        warning_label = tk.Label(self.浮空仙术_tab, 
+                                text="警告: 仙术地基对于14和15号接口有毁坏作用,\n目前该技术问题仍无法解决",
+                                bg="lightyellow", 
+                                fg="black", 
+                                font=("Arial", 10),
+                                justify=tk.LEFT)
+        warning_label.pack(pady=5)
+        
         convert_button = tk.Button(self.浮空仙术_tab, text="转换", command=self._执行浮空仙术转换)
         convert_button.pack(pady=10)
 
