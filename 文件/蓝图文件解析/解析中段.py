@@ -149,8 +149,8 @@ class 比特流解析器:
         所有建筑 = []
         for i in range(建筑数):
             num, = self.解析("i")
-            # 提供更详细的断言错误信息
-            assert num == -101, f"解析建筑时出现错误的标识符，期望值: -101, 实际值: {num}, 建筑索引: {i}, 总建筑数: {建筑数}"
+            # V0.10.34.28281: 只支持-102版本，不再兼容旧版本
+            assert num == -102, f"解析建筑时出现错误的标识符，期望值: -102, 实际值: {num}, 建筑索引: {i}, 总建筑数: {建筑数}"
             (
                 index,
                 itemId,
@@ -190,6 +190,26 @@ class 比特流解析器:
                 参数=[类型.Int32(x) for x in parameter]
             )
             l_额外参数 = l_额外参数.尝试解析(模型(modelIndex))
+            
+            # V0.10.34.28281: 信标文本内容（与游戏/晨隐一致：先 Int32 字符数，再 7-bit 字节长度 + UTF-8 字节）
+            (content_char_count,) = self.解析("i")
+            content_str = ""
+            if content_char_count > 0:
+                content_length = 0
+                shift = 0
+                while True:
+                    b, = self.解析("B")
+                    content_length |= (b & 0x7F) << shift
+                    if (b & 0x80) == 0:
+                        break
+                    shift += 7
+                    if shift > 35:
+                        raise ValueError("Bad 7-bit encoded int")
+                if content_length > 0:
+                    content_bytes = bytes(
+                        self.解析("B")[0] for _ in range(content_length)
+                    )
+                    content_str = content_bytes.decode('utf-8', errors='replace')
 
             输出接口 = 建筑主导接口(
                 目标序号=类型.Int32(outputObjIdx),
@@ -216,6 +236,7 @@ class 比特流解析器:
                 配方序号=l_配方序号,
                 过滤物品序号=图标(filterId),
                 额外参数=l_额外参数,
+                额外文本内容=content_str,
 
                 悠米_接口分析 = 多接口分析(),
                 悠米_建筑类型 = 建筑类型分析.无特殊性,
