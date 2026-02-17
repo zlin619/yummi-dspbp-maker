@@ -65,11 +65,10 @@ class 建筑(蓝图dataclass基类):
     配方序号: 配方  # 常见于制造厂类建筑
     过滤物品序号: 图标  # UInt16,常见于分拣器、四向
     额外参数: 额外参数
-
-    # TODO:
-    # 以下并非正式数据的一部分
+    # TODO: 以下并非正式数据的一部分
     悠米_接口分析: 多接口分析
     悠米_建筑类型: 建筑类型分析
+    信标文本内容: str = ""  # V0.10.34.28281新增：信标的文本内容
     悠米_玩家标注: Any = None
 
     ########################
@@ -99,7 +98,8 @@ class 建筑(蓝图dataclass基类):
     def 转比特流(self) -> bytes:
         self.检查姿态()
         流数据 = bytearray()
-        流数据.extend(struct.pack("<i", -101))
+        # V0.10.34.28281: 版本标识改为-102
+        流数据.extend(struct.pack("<i", -102))
         流数据.extend(
             struct.pack(
                 "<iHHb",
@@ -126,6 +126,21 @@ class 建筑(蓝图dataclass基类):
             )
         )
         流数据.extend(self.额外参数.转比特流())
+        
+        # V0.10.34.28281: 信标文本内容（先 Int32 字符数，再 7-bit 字节长度 + UTF-8 字节，与游戏一致）
+        content_bytes = self.信标文本内容.encode('utf-8')
+        byte_len = len(content_bytes)
+        if byte_len == 0:
+            流数据.extend(struct.pack("<i", 0))
+        else:
+            流数据.extend(struct.pack("<i", len(self.信标文本内容)))
+            content_length = byte_len
+            while content_length >= 0x80:
+                流数据.extend(struct.pack("B", (content_length & 0x7F) | 0x80))
+                content_length >>= 7
+            流数据.extend(struct.pack("B", content_length & 0x7F))
+            流数据.extend(content_bytes)
+        
         return 流数据
     # 转比特流 到此为止
 
