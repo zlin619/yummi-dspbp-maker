@@ -12,27 +12,6 @@ from 蓝图格式.接口分析.多接口分析 import 多接口分析
 import 蓝图格式.坐标 as 坐标格式
 import 蓝图格式.类型 as 类型
 
-
-def 解析额外文本(原始: str) -> dict:
-    """信标额外文本：第1行=全息文字，第2行=信标标签(分号分隔)，第3行=信标名称，其余=正文(可换行)。"""
-    parts = 原始.split('\n')
-    return {
-        "全息文字": parts[0] if len(parts) > 0 else "",
-        "信标标签": parts[1] if len(parts) > 1 else "",
-        "信标名称": parts[2] if len(parts) > 2 else "",
-        "正文": "\n".join(parts[3:]) if len(parts) > 3 else "",
-    }
-
-
-def 由额外文本解析组合(解析: dict) -> str:
-    """由 全息文字/信标标签/信标名称/正文 组合回原始字符串。"""
-    全息文字 = 解析.get("全息文字", "") or ""
-    信标标签 = 解析.get("信标标签", "") or ""
-    信标名称 = 解析.get("信标名称", "") or ""
-    正文 = 解析.get("正文", "") or ""
-    前几行 = [全息文字, 信标标签, 信标名称]
-    return "\n".join(前几行 + [正文]) if 正文 else "\n".join(前几行)
-
 class 建筑类型分析(IntEnum):
     未分析 = auto()
     未知 = auto()
