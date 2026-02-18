@@ -103,10 +103,10 @@ class 蓝图头部(蓝图dataclass基类):
     缩略图: 缩略图
     创建时间: 时间戳
     游戏版本: str
+    作者: url字符串
+    自定义版本: url字符串
+    额外新建属性: url字符串
     蓝图描述: url字符串
-    作者: url字符串 = field(default_factory=lambda: url字符串(""))
-    自定义版本: url字符串 = field(default_factory=lambda: url字符串(""))
-    额外新建属性: url字符串 = field(default_factory=lambda: url字符串(""))
 
     ########################
     # 以上为字段，以下为函数 #
