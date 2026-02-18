@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Union
 from urllib.parse import unquote, quote
@@ -104,13 +104,22 @@ class 蓝图头部(蓝图dataclass基类):
     创建时间: 时间戳
     游戏版本: str
     蓝图描述: url字符串
+    作者: url字符串 = field(default_factory=lambda: url字符串(""))
+    自定义版本: url字符串 = field(default_factory=lambda: url字符串(""))
+    额外新建属性: url字符串 = field(default_factory=lambda: url字符串(""))
 
     ########################
     # 以上为字段，以下为函数 #
     ########################
+    @classmethod
+    def 由json转换(cls, 数据字典: dict):
+        for 键 in ('作者', '自定义版本', '额外新建属性'):
+            数据字典.setdefault(键, '')
+        return cls.原始函数_由json转换(数据字典)
+
     def 转蓝图字符串(self) -> str:
         return ','.join([
-            '0',  # 固定值
+            '1',  # V0.10.34 新格式
             str(self.缩略图.图标布局),
             self.缩略图.图标1.转蓝图字符串(),
             self.缩略图.图标2.转蓝图字符串(),
@@ -121,7 +130,10 @@ class 蓝图头部(蓝图dataclass基类):
             self.创建时间.转蓝图字符串(),
             self.游戏版本,
             self.缩略图.小标题.转蓝图字符串(),
-            self.蓝图描述.转蓝图字符串()
+            self.作者.转蓝图字符串(),
+            self.自定义版本.转蓝图字符串(),
+            self.额外新建属性.转蓝图字符串(),
+            self.蓝图描述.转蓝图字符串(),
         ])
 
 
